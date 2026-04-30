@@ -1,26 +1,50 @@
 import { useChallengeStore } from '@/stores/challengeStore';
 import { useUIStore } from '@/stores/uiStore';
-import { CONSOLE_RUNNING_LINE, CONSOLE_EMPTY_PLACEHOLDER } from '@/lib/constants';
+import { useEffect, useRef } from 'react';
 
 interface UseRunCodeReturn {
   triggerRun: () => void;
 }
 
-/** Mock: prints editor content to console. No actual code execution. */
 export function useRunCode(): UseRunCodeReturn {
   const editorContent = useChallengeStore((state) => state.editorContent);
   const clearOutput = useUIStore((state) => state.clearOutput);
   const appendOutputLine = useUIStore((state) => state.appendOutputLine);
   const setConsoleActiveTab = useUIStore((state) => state.setConsoleActiveTab);
+  const editorContentMap = useChallengeStore((state) => state.editorContentMap);
+  const activeFilePath = useChallengeStore((state) => state.activeFilePath);
+
+  const workerRef = useRef<Worker | null>(null);
+
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL('../workers/pyodide.worker.tsx', import.meta.url),
+      { type: "module"}
+    )
+    workerRef.current.postMessage({ type: 'init' });
+    workerRef.current.onmessage = (event) => {
+      const {type} = event.data;
+      if (type === 'result') {
+        const lines = event.data.stdout.split('\n');
+        lines.forEach((line: string) => appendOutputLine(line));
+      }
+
+      if (type === 'error') {
+        appendOutputLine(`Error: ${event.data.message}`);
+      }
+    };
+    return () => workerRef.current?.terminate();
+
+  }, []);
 
   const triggerRun = () => {
     clearOutput();
-    appendOutputLine(CONSOLE_RUNNING_LINE);
-    const lines = editorContent.split('\n');
-    lines.forEach((line) => {
-      appendOutputLine(`  ${line}`);
+    workerRef.current?.postMessage({
+      type: 'run',
+      code: editorContent,
+      files: editorContentMap,
+      activeFilePath,
     });
-    appendOutputLine(CONSOLE_EMPTY_PLACEHOLDER);
     setConsoleActiveTab('output');
   };
 

@@ -14,13 +14,24 @@ export interface Hint {
   id: string;
   text: string;
 }
-
+export interface StarterCode {
+  path: string;
+  content: string;
+}
 export interface Challenge {
   id: string;
   title: string;
   difficulty: Difficulty;
   descriptionMarkdown: string;
-  starterCode: string;
+  starterCode: StarterCode[];
   hints: Hint[];
   testCases: TestCase[];
 }
+
+export type FileTreeItem = {
+  name: string
+  path: string
+} & (
+  | {type: 'file'; children?: never}
+  | {type: 'folder'; children: FileTreeItem[]}
+  )

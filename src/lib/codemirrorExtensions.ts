@@ -1,5 +1,5 @@
 import { keymap, lineNumbers, EditorView } from "@codemirror/view";
-import { defaultKeymap, historyKeymap, indentWithTab, history } from "@codemirror/commands";
+import { defaultKeymap, historyKeymap, history } from "@codemirror/commands";
 import { python } from "@codemirror/lang-python";
 import { indentUnit } from "@codemirror/language";
 import { autocompletion } from "@codemirror/autocomplete";
@@ -13,16 +13,16 @@ export function buildExtensions(onChange: (value: string) => void): Extension[] 
     python(),
     autocompletion(),
     oneDark,
-    keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
+    keymap.of([...defaultKeymap, ...historyKeymap]),
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
         onChange(update.state.doc.toString());
       }
     }),
     EditorState.tabSize.of(4),
-    indentUnit.of('\t'),
+    indentUnit.of('    '),
     EditorView.theme({
-      "&": { height: "100%", background: "#1E1E1E" },
+      "&": { height: "100%" },
       ".cm-scroller": { overflow: "auto" },
       ".cm-content": { padding: "12px 0" },
     }),
