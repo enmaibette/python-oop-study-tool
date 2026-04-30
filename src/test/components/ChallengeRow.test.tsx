@@ -9,7 +9,7 @@ const mockChallenge: Challenge = {
   title: 'Create a Class – Dog',
   difficulty: 'Easy',
   descriptionMarkdown: '## Description\n\nTest description',
-  starterCode: '',
+  starterCode: [],
   hints: [],
   testCases: [],
 };
