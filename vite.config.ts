@@ -8,8 +8,11 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },
+  worker: {
+    format: 'es',
+  },
   optimizeDeps: {
-    exclude: ['pyodide'], // ← Pyodide aus Vite optimizer rausnehmen
+    exclude: ['pyodide'],
   },
   server: {
     headers: {
