@@ -31,7 +31,7 @@ describe('ConsolePanel', () => {
 
   it('shows output content when activeTab is "output"', () => {
     render(<ConsolePanel {...defaultProps} />);
-    expect(screen.getByText(/Running code/)).toBeInTheDocument();
+    expect(screen.getByText(/Your output will appear here/)).toBeInTheDocument();
   });
 
   it('shows test case content when activeTab is "testcases"', () => {
@@ -73,7 +73,7 @@ describe('ConsolePanel', () => {
 
   it('hides content when isOpen is false', () => {
     render(<ConsolePanel {...defaultProps} isOpen={false} />);
-    expect(screen.queryByText(/Running code/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Your output will appear here/)).not.toBeInTheDocument();
   });
 
   it('calls onOpen when a tab is clicked while closed', async () => {

@@ -32,8 +32,8 @@ describe('ChallengeList', () => {
 
   it('renders all challenge titles', () => {
     renderList();
-    expect(screen.getByText('Create a Class – Dog')).toBeInTheDocument();
-    expect(screen.getByText('Methode – Add a Method to the Dog class')).toBeInTheDocument();
+    expect(screen.getByText('Create a Class - Dog')).toBeInTheDocument();
+    expect(screen.getByText('Methode - Add a Method to the Dog class')).toBeInTheDocument();
     expect(screen.getByText('Inheritance')).toBeInTheDocument();
     expect(screen.getByText('Create a Simple Bank Account Class')).toBeInTheDocument();
   });

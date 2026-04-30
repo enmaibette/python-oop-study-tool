@@ -61,7 +61,7 @@ describe('TestCaseCard', () => {
   it('renders correctly for a passing test case', () => {
     render(<TestCaseCard testCase={passTestCase} />);
     expect(screen.getByText('Test Case 2: Pass scenario')).toBeInTheDocument();
-    expect(screen.getByText('42')).toBeInTheDocument();
+    expect(screen.getAllByText('42')).toHaveLength(2);
   });
 
   it('renders correctly for a failing test case', () => {
