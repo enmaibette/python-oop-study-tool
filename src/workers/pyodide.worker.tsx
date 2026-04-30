@@ -1,47 +1,40 @@
-import { loadPyodide, PyodideInterface } from 'pyodide';
-
-let pyodide: PyodideInterface | null = null;
+import setupPy from '@/python/setup.py?raw';
 
 const initializePyodide = async () => {
   pyodide = await loadPyodide();
-  self.postMessage({type: "ready"})
-}
+  await pyodide.runPythonAsync(setupPy);
+  isReady = true;
+  self.postMessage({ type: 'ready' });
+};
+
+import { loadPyodide, PyodideInterface } from 'pyodide';
+let pyodide: PyodideInterface | null = null;
+
+let isReady = false;
 
 self.onmessage = async (event) => {
-  const { type, code, files } = event.data;
+  const { type, code, files, activeFilePath } = event.data;
   if (type === 'init') {
     await initializePyodide();
     return;
   }
   if (type === 'run') {
     const sanitizedCode = code.replace(/\t/g, '    ');
-    if(!pyodide) return;
-    if(files) {
-      for(const[filePath, content] of Object.entries(files as Record<string, string>)) {
-        const parts = filePath.split('/');
-        let dir = '';
-        for (const part of parts.slice(0, -1)) {
-          dir = dir ? `${dir}/${part}` : part;
-          try {
-            pyodide.FS.mkdir(dir);
-          } catch {} // ignore if exists
-        }
-        pyodide.FS.writeFile(filePath, (content as string).replace(/\t/g, '    '));
-      }
-    }
+    console.log('isReady: ' + isReady);
+    if (!pyodide || !isReady) return;
+
+    const dir = activeFilePath?.split('/').slice(0, -1).join('/') ?? '';
     try {
+      pyodide.globals.get('_setup')(
+        pyodide.toPy((files ?? {}) as Record<string, string>),
+        dir ? `/${dir}` : ''
+      );
       const stdout: string[] = [];
       pyodide.setStdout({ batched: (line) => stdout.push(line) });
       await pyodide.runPythonAsync(sanitizedCode);
-
-      self.postMessage({
-        type: 'result',
-        stdout: stdout.join('\n')
-      });
-
-
+      self.postMessage({ type: 'result', stdout: stdout.join('\n') });
     } catch (error) {
-      self.postMessage({type: "error", message: (error as Error).message});
+      self.postMessage({ type: 'error', message: (error as Error).message });
     }
   }
-}
+};

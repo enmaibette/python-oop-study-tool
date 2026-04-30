@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
 @keyframes accordion-down {
   from { height: 0; opacity: 0; }
@@ -11,42 +10,39 @@
   from { height: var(--radix-accordion-content-height); opacity: 1; }
   to { height: 0; opacity: 0; }
 }
-
 @theme {
-  --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
-  --color-background: oklch(1 0 0);
-  --color-foreground: oklch(0.145 0 0);
-  --color-card: oklch(1 0 0);
-  --color-card-foreground: oklch(0.145 0 0);
-  --color-popover: oklch(1 0 0);
-  --color-popover-foreground: oklch(0.145 0 0);
-  --color-primary: oklch(0.205 0 0);
-  --color-primary-foreground: oklch(0.985 0 0);
-  --color-secondary: oklch(0.97 0 0);
-  --color-secondary-foreground: oklch(0.205 0 0);
-  --color-muted: oklch(0.97 0 0);
-  --color-muted-foreground: oklch(0.556 0 0);
-  --color-accent: oklch(0.97 0 0);
-  --color-accent-foreground: oklch(0.205 0 0);
-  --color-destructive: oklch(0.577 0.245 27.325);
-  --color-border: oklch(0.922 0 0);
-  --color-input: oklch(0.922 0 0);
-  --color-ring: oklch(0.708 0 0);
-  --color-sidebar: oklch(0.985 0 0);
-  --color-sidebar-foreground: oklch(0.145 0 0);
-  --color-sidebar-primary: oklch(0.205 0 0);
-  --color-sidebar-primary-foreground: oklch(0.985 0 0);
-  --color-sidebar-accent: oklch(0.97 0 0);
-  --color-sidebar-accent-foreground: oklch(0.205 0 0);
-  --color-sidebar-border: oklch(0.922 0 0);
-  --color-sidebar-ring: oklch(0.708 0 0);
+  --color-background: #1E1E1E;
+  --color-foreground: #D4D4D4;
+  --color-card: #252526;
+  --color-card-foreground: #D4D4D4;
+  --color-popover: #252526;
+  --color-popover-foreground: #D4D4D4;
+  --color-primary: #569CD6;
+  --color-primary-foreground: #1E1E1E;
+  --color-secondary: #2D2D2D;
+  --color-secondary-foreground: #D4D4D4;
+  --color-muted: #2D2D2D;
+  --color-muted-foreground: #858585;
+  --color-accent: #569CD6;
+  --color-accent-foreground: #D4D4D4;
+  --color-destructive: #F48771;
+  --color-border: rgba(255, 255,   255, 0.1);
+  --color-input: #2D2D2D;
+  --color-ring: #569CD6;
+  --color-sidebar: #252526;
+  --color-sidebar-foreground: #D4D4D4;
+  --color-sidebar-primary: #569CD6;
+  --color-sidebar-primary-foreground: #1E1E1E;
+  --color-sidebar-accent: #2D2D2D;
+  --color-sidebar-accent-foreground: #D4D4D4;
+  --color-sidebar-border: rgba(255, 255, 255, 0.1);
+  --color-sidebar-ring: #569CD6;
 
   --radius: 0.625rem;
 }
 
-/* Custom VS Code-style design tokens */
 :root {
   --vs-background: #1E1E1E;
   --vs-surface: #252526;
@@ -55,7 +51,7 @@
   --vs-accent-hover: #4a86bb;
   --vs-text: #D4D4D4;
   --vs-muted: #858585;
-  --vs-border: rgba(255, 255, 255, 0.07);
+  --vs-border: rgba(255, 255, 255, 0.1);
   --vs-destructive: #F48771;
   --vs-destructive-hover: #d4705c;
   --vs-row-hover: #333333;
@@ -70,40 +66,14 @@
   --muted:       var(--vs-muted);
   --border:      var(--vs-border);
   --destructive: var(--vs-destructive);
-}
 
-.dark {
-  --color-background:                 var(--vs-background);
-  --color-foreground:                 var(--vs-text);
-  --color-card:                       var(--vs-surface);
-  --color-card-foreground:            var(--vs-text);
-  --color-popover:                    var(--vs-surface);
-  --color-popover-foreground:         var(--vs-text);
-  --color-primary:                    var(--vs-accent);
-  --color-primary-foreground:         var(--vs-background);
-  --color-secondary:                  var(--vs-elevated);
-  --color-secondary-foreground:       var(--vs-text);
-  --color-muted:                      var(--vs-elevated);
-  --color-muted-foreground:           var(--vs-muted);
-  --color-accent:                     var(--vs-accent);
-  --color-accent-foreground:          var(--vs-text);
-  --color-destructive:                var(--vs-destructive);
-  --color-border:                     var(--vs-border);
-  --color-input:                      var(--vs-elevated);
-  --color-ring:                       var(--vs-accent);
-  --color-sidebar:                    var(--vs-surface);
-  --color-sidebar-foreground:         var(--vs-text);
-  --color-sidebar-primary:            var(--vs-accent);
-  --color-sidebar-primary-foreground: var(--vs-background);
-  --color-sidebar-accent:             var(--vs-elevated);
-  --color-sidebar-accent-foreground:  var(--vs-text);
-  --color-sidebar-border:             var(--vs-border);
-  --color-sidebar-ring:               var(--vs-accent);
+
 }
 
 @layer base {
   * {
     box-sizing: border-box;
+    border-color: var(--color-border);
   }
 
   html,
@@ -114,22 +84,11 @@
     padding: 0;
   }
 
-  html {
-    font-family: var(--font-sans);
-  }
-
   body {
     background-color: var(--vs-background);
     color: var(--vs-text);
-    font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            'Segoe UI',
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            sans-serif;
+    font-family: var(--font-sans);
+
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

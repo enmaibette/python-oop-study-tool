@@ -1,6 +1,5 @@
 import { useChallengeStore } from '@/stores/challengeStore';
 import { useUIStore } from '@/stores/uiStore';
-import { CONSOLE_RUNNING_LINE } from '@/lib/constants';
 import { useEffect, useRef } from 'react';
 
 interface UseRunCodeReturn {
@@ -13,6 +12,7 @@ export function useRunCode(): UseRunCodeReturn {
   const appendOutputLine = useUIStore((state) => state.appendOutputLine);
   const setConsoleActiveTab = useUIStore((state) => state.setConsoleActiveTab);
   const editorContentMap = useChallengeStore((state) => state.editorContentMap);
+  const activeFilePath = useChallengeStore((state) => state.activeFilePath);
 
   const workerRef = useRef<Worker | null>(null);
 
@@ -39,8 +39,12 @@ export function useRunCode(): UseRunCodeReturn {
 
   const triggerRun = () => {
     clearOutput();
-    appendOutputLine(CONSOLE_RUNNING_LINE);
-    workerRef.current?.postMessage({ type: 'run', code: editorContent, files: editorContentMap});
+    workerRef.current?.postMessage({
+      type: 'run',
+      code: editorContent,
+      files: editorContentMap,
+      activeFilePath,
+    });
     setConsoleActiveTab('output');
   };
 

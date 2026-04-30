@@ -15,7 +15,7 @@ export function ChallengeRow({ challenge, onClick }: ChallengeRowProps) {
         w-full flex items-center justify-between
         px-5 py-4 rounded-full
         bg-(--elevated)
-        hover:bg-(--row-hover)
+        hover:bg-(--vs-row-hover)
         transition-colors duration-150
         text-left
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)
