@@ -1,16 +1,18 @@
+import { loadPyodide, PyodideInterface } from 'pyodide';
+import { version } from 'pyodide/package.json';
 import setupPy from '@/python/setup.py?raw';
 
+let pyodide: PyodideInterface | null = null;
+let isReady = false;
+
 const initializePyodide = async () => {
-  pyodide = await loadPyodide();
+  pyodide = await loadPyodide({
+    indexURL: `https://cdn.jsdelivr.net/pyodide/v${version}/full/`,
+  });
   await pyodide.runPythonAsync(setupPy);
   isReady = true;
   self.postMessage({ type: 'ready' });
 };
-
-import { loadPyodide, PyodideInterface } from 'pyodide';
-let pyodide: PyodideInterface | null = null;
-
-let isReady = false;
 
 self.onmessage = async (event) => {
   const { type, code, files, activeFilePath } = event.data;
