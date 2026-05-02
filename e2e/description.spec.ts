@@ -19,11 +19,6 @@ test.describe('Description panel', () => {
     await expect(page.getByText('Create a Class – Dog').first()).toBeVisible();
   });
 
-  test('AC-04 — difficulty badge is visible', async ({ page }) => {
-    // Challenge 1 is Easy
-    await expect(page.getByText('Easy')).toBeVisible();
-  });
-
   test('AC-04 — requirements section is visible', async ({ page }) => {
     await expect(page.getByText('Requirements')).toBeVisible();
   });

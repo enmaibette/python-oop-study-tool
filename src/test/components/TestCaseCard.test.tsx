@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { TestCaseCard } from '@/components/ui/TestCaseCard';
+import { TestCaseCard } from '../../components/testing/TestCaseCard';
 import type { TestCase } from '@/types';
 
 const pendingTestCase: TestCase = {

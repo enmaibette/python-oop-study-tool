@@ -1,4 +1,4 @@
-import { TestCaseCard } from '@/components/ui/TestCaseCard';
+import { TestCaseCard } from '../../components/testing/TestCaseCard';
 import type { TestCase } from '@/types';
 
 interface TestCasesTabProps {

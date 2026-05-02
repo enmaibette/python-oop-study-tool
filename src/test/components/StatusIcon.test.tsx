@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
-import { StatusIcon } from '@/components/ui/StatusIcon';
+import { StatusIcon } from '../../components/testing/StatusIcon';
 
 // Helper that returns the rendered SVG element
 function getSvg(status: 'pass' | 'fail' | 'pending') {
@@ -40,13 +40,13 @@ describe('StatusIcon', () => {
   });
 
   it('passes additional className prop through for "pass"', () => {
-    const { container: c } = render(<StatusIcon status="pass" className="custom-class" />);
+    const { container: c } = render(<StatusIcon status="pass"  />);
     const svg = c.querySelector('svg')!;
     expect(svg.getAttribute('class')).toMatch(/custom-class/);
   });
 
   it('passes additional className prop through for "pending"', () => {
-    const { container: c } = render(<StatusIcon status="pending" className="extra" />);
+    const { container: c } = render(<StatusIcon status="pending" />);
     const svg = c.querySelector('svg')!;
     expect(svg.getAttribute('class')).toMatch(/extra/);
   });

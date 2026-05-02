@@ -22,12 +22,18 @@ export default function ChallengePage() {
   const outputLines = useUIStore((state) => state.outputLines);
   const setConsolePanelOpen = useUIStore((state) => state.setConsolePanelOpen);
   const isConsolePanelOpen = useUIStore((state) => state.isConsolePanelOpen);
+  const clearOutput = useUIStore((state) => state.clearOutput);
+  const clearTestCaseResults = useUIStore((state) => state.clearTestCaseResults);
+  const setTestCaseResults = useUIStore((state) => state.setTestCaseResults);
 
   const challenge = useChallenge(id);
+  const testCases = useUIStore((state) => state.testCaseResults);
 
   useEffect(() => {
     if (id && challenge) {
+      clearOutput();
       setActiveChallenge(id);
+      setTestCaseResults(challenge.testCases);
     }
   }, [id, challenge, setActiveChallenge]);
 
@@ -53,16 +59,16 @@ export default function ChallengePage() {
           />
         }
         editorPanel={<EditorPanel />}
-        consolePanel={
-          <ConsolePanel
-            activeTab={consoleActiveTab}
-            onTabChange={setConsoleActiveTab}
-            outputLines={outputLines}
-            testCases={challenge.testCases}
-            onOpenChange={setConsolePanelOpen}
-            isOpen={isConsolePanelOpen}
-          />
-        }
+          consolePanel={
+            <ConsolePanel
+              activeTab={consoleActiveTab}
+              onTabChange={setConsoleActiveTab}
+              outputLines={outputLines}
+              testCases={testCases}
+              onOpenChange={setConsolePanelOpen}
+              isOpen={isConsolePanelOpen}
+            />
+          }
       />
     </div>
   );

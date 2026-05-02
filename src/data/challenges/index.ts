@@ -1,18 +1,10 @@
-import type { Challenge, Difficulty, Hint, TestCase } from '@/types';
+import type { Challenge, Hint, TestCase } from '@/types';
 
 interface ChallengeFiles {
   descriptionMarkdown?: string;
   hintsMarkdown?: string;
   exampleCodeFiles: Array<{ path: string; content: string }>;
-  testCasesJson?: string;
-}
-
-interface TestCaseJsonEntry {
-  id: string;
-  title: string;
-  expected: string;
-  got: string;
-  status: TestCase['status'];
+  testCasePy?: string;
 }
 
 const descriptionModules = import.meta.glob('./*/description.md', {
@@ -33,7 +25,7 @@ const exampleCodeModules = import.meta.glob('./*/exampleCode/**', {
   query: '?raw',
 }) as Record<string, string>;
 
-const testcaseModules = import.meta.glob('./*/testcases/testcase.json', {
+const testcaseModules = import.meta.glob('./*/testcase.py', {
   eager: true,
   import: 'default',
   query: '?raw',
@@ -72,7 +64,7 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
     getOrCreate(getFolderName(filePath)).exampleCodeFiles.push({ path: filePath, content });
   }
   for (const [filePath, content] of Object.entries(testcaseModules)) {
-    getOrCreate(getFolderName(filePath)).testCasesJson = content;
+    getOrCreate(getFolderName(filePath)).testCasePy = content;
   }
 
   return files;
@@ -102,18 +94,14 @@ function parseFrontmatter(markdown: string): { frontmatter: Record<string, strin
   return { frontmatter, body: lines.slice(endIndex + 1).join('\n') };
 }
 
-function parseDifficulty(value: string): Difficulty {
-  if (value === 'Easy' || value === 'Medium' || value === 'Hard') return value;
-  throw new Error(`Invalid challenge difficulty: ${value}`);
-}
 
-function parseDescriptionDocument(markdown: string): { id: string; title: string; difficulty: Difficulty; descriptionMarkdown: string } {
+function parseDescriptionDocument(markdown: string): { id: string; title: string; descriptionMarkdown: string } {
   const { frontmatter, body } = parseFrontmatter(markdown);
-  const { id, title, difficulty } = frontmatter;
-  if (!id || !title || !difficulty) {
-    throw new Error('Challenge description.md is missing required metadata (id, title, difficulty).');
+  const { id, title} = frontmatter;
+  if (!id || !title) {
+    throw new Error('Challenge description.md is missing required metadata (id, title).');
   }
-  return { id, title, difficulty: parseDifficulty(difficulty), descriptionMarkdown: body.trim() };
+  return { id, title, descriptionMarkdown: body.trim() };
 }
 
 function parseHints(markdown: string): Hint[] {
@@ -127,26 +115,25 @@ function parseHints(markdown: string): Hint[] {
     }));
 }
 
-function parseTestCases(jsonText: string): TestCase[] {
-  const parsed = JSON.parse(jsonText) as TestCaseJsonEntry[] | { testCases?: TestCaseJsonEntry[] };
-  const entries = Array.isArray(parsed) ? parsed : parsed.testCases;
-  if (!Array.isArray(entries)) {
-    throw new Error('testcases/testcase.json must be an array or an object with a testCases array.');
+function parseTestCasesFromPy(pyContent: string): TestCase[] {
+  const regex = /def (test_\w+)\(self\):\s*"""([\s\S]*?)"""/g;
+  const results: TestCase[] = [];
+  let match;
+  while ((match = regex.exec(pyContent)) !== null) {
+    const lines = match[2].trim().split('\n');
+    const title = lines[0].trim();
+    const expectedLine = lines.find((l) => l.includes('Expected:'));
+    const expected = expectedLine ? expectedLine.split('Expected:')[1].trim() : '';
+    results.push({ id: match[1], title, expected, got: '—', status: 'pending' });
   }
-  return entries.map((entry, index) => ({
-    id: entry.id || `tc${index + 1}`,
-    title: entry.title,
-    expected: entry.expected,
-    got: entry.got,
-    status: entry.status,
-  }));
+  return results;
 }
 
 function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): Challenge {
   const prefix = getPrefix(folderName);
   if (!files.descriptionMarkdown) throw new Error(`Missing description.md for ${folderName}.`);
   if (!files.hintsMarkdown) throw new Error(`Missing hints.md for ${folderName}.`);
-  if (!files.testCasesJson) throw new Error(`Missing testcases/testcase.json for ${folderName}.`);
+  if (!files.testCasePy) throw new Error(`Missing testcase.py for ${folderName}.`);
   if (files.exampleCodeFiles.length === 0) throw new Error(`Missing exampleCode/*.py for ${folderName}.`);
 
   const parsed = parseDescriptionDocument(files.descriptionMarkdown);
@@ -163,11 +150,11 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
   return {
     id: prefix,
     title: parsed.title,
-    difficulty: parsed.difficulty,
     descriptionMarkdown: parsed.descriptionMarkdown,
     starterCode,
     hints: parseHints(files.hintsMarkdown),
-    testCases: parseTestCases(files.testCasesJson),
+    testCases: parseTestCasesFromPy(files.testCasePy),
+    testCasesPy: files.testCasePy!,
   };
 }
 

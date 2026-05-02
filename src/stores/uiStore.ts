@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ConsoleTab } from '@/types';
+import type { ConsoleTab, TestCase } from '@/types';
 
 interface UIState {
   isLeftPanelOpen: boolean;
@@ -10,9 +10,13 @@ interface UIState {
   setConsoleActiveTab: (tab: ConsoleTab) => void;
   setDescriptionActiveTab: (tab: 'description' | 'hint') => void;
   appendOutputLine: (line: string) => void;
+  appendOutputLines: (lines: string[]) => void;
   clearOutput: () => void;
   isConsolePanelOpen: boolean;
   setConsolePanelOpen: (open: boolean) => void;
+  testCaseResults: TestCase[];
+  setTestCaseResults: (results: TestCase[]) => void;
+  clearTestCaseResults: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -21,6 +25,7 @@ export const useUIStore = create<UIState>((set) => ({
   descriptionActiveTab: 'description',
   outputLines: [],
   isConsolePanelOpen: true,
+  testCaseResults: [],
 
   setLeftPanelOpen: (open: boolean) => {
     set({ isLeftPanelOpen: open });
@@ -37,6 +42,9 @@ export const useUIStore = create<UIState>((set) => ({
   appendOutputLine: (line: string) => {
     set((state) => ({ outputLines: [...state.outputLines, line] }));
   },
+  appendOutputLines: (lines: string[]) => {
+    set((state) => ({ outputLines: [...state.outputLines, ...lines] }));
+  },
 
   clearOutput: () => {
     set({ outputLines: [] });
@@ -44,5 +52,12 @@ export const useUIStore = create<UIState>((set) => ({
 
   setConsolePanelOpen: (open: boolean) => {
     set({ isConsolePanelOpen: open });
-  }
+  },
+
+  setTestCaseResults: (results: TestCase[]) => {
+    set({ testCaseResults: results });
+  },
+  clearTestCaseResults: () => {
+    set({ testCaseResults: [] });
+  },
 }));

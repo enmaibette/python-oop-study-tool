@@ -1,7 +1,6 @@
 ---
 id: '1'
 title: 'Create a Class - Dog'
-difficulty: 'Easy'
 ---
 
 ## Description

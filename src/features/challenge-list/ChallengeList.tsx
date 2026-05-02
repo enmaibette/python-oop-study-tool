@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ChallengeRow } from '@/components/ui/ChallengeRow';
+import { ChallengeRow } from '../../components/challenge/ChallengeRow';
 import { useChallengeStore } from '@/stores/challengeStore';
 
 export function ChallengeList() {

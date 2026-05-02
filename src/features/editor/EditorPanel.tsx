@@ -17,7 +17,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/CustomDrawer.tsx';
+} from '../../components/common/CustomDrawer.tsx';
 
 function flatFiles(tree: FileTreeItem[]): (FileTreeItem & { type: 'file' })[] {
   return tree.flatMap((item) =>
@@ -135,15 +135,19 @@ export const EditorPanel = memo(function EditorPanel() {
               >
                 <span>{f.path.replace(/^[^/]+\//, '')}</span>
                 <Button
+                  asChild
                   variant="ghost"
                   size="icon"
                   className="ml-1 h-4 w-4 p-0 data-[state=active]:after:opacity-0!"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    closeFile(f.path);
-                  }}
                 >
-                  <X className="h-3 w-3" />
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      closeFile(f.path);
+                    }}
+                  >
+                    <X className="h-3 w-3" />
+                  </span>
                 </Button>
               </TabsTrigger>
             ))}

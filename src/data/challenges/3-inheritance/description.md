@@ -1,7 +1,6 @@
 ---
 id: '3'
 title: 'Inheritance'
-difficulty: 'Medium'
 ---
 
 ## Description

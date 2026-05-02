@@ -1,7 +1,6 @@
 ---
 id: '4'
 title: 'Create a Simple Bank Account Class'
-difficulty: 'Easy'
 ---
 
 ## Description

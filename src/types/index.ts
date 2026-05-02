@@ -1,4 +1,3 @@
-export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 export type TestCaseStatus = 'pending' | 'pass' | 'fail';
 export type ConsoleTab = 'output' | 'testcases';
 
@@ -21,11 +20,11 @@ export interface StarterCode {
 export interface Challenge {
   id: string;
   title: string;
-  difficulty: Difficulty;
   descriptionMarkdown: string;
   starterCode: StarterCode[];
   hints: Hint[];
   testCases: TestCase[];
+  testCasesPy: string;
 }
 
 export type FileTreeItem = {

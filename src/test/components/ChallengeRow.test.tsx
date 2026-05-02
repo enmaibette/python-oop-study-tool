@@ -1,17 +1,17 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ChallengeRow } from '@/components/ui/ChallengeRow';
+import { ChallengeRow } from '../../components/challenge/ChallengeRow';
 import type { Challenge } from '@/types';
 
 const mockChallenge: Challenge = {
   id: '1',
   title: 'Create a Class – Dog',
-  difficulty: 'Easy',
   descriptionMarkdown: '## Description\n\nTest description',
   starterCode: [],
   hints: [],
   testCases: [],
+  testCasesPy: ''
 };
 
 describe('ChallengeRow', () => {

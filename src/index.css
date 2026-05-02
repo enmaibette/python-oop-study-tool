@@ -66,6 +66,7 @@
   --muted:       var(--vs-muted);
   --border:      var(--vs-border);
   --destructive: var(--vs-destructive);
+  --success: var(--vs-success)
 
 
 }

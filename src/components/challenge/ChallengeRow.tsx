@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-import type { Challenge } from '@/types';
+import type { Challenge } from 'src/types';
 
 interface ChallengeRowProps {
   challenge: Challenge;

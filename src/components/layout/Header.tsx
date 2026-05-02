@@ -14,7 +14,7 @@ export function Header() {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const challenges = useChallengeStore((state) => state.challenges);
-  const { triggerRun } = useRunCode();
+  const { triggerRun, triggerSubmit } = useRunCode();
 
   const isChallengePage = location.pathname.startsWith('/challenge/');
   const challengeLabel =
@@ -32,32 +32,32 @@ export function Header() {
         z-10
       "
     >
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link
-                to="/"
-                className="text-(--accent) font-semibold text-sm tracking-wide select-none hover:opacity-90"
-              >
-                {'</>'} Python OOP
-              </Link>
-            </BreadcrumbItem>
-            {isChallengePage && challengeLabel && (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="text-sm">{challengeLabel}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </>
-            )}
-          </BreadcrumbList>
-        </Breadcrumb>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Link
+              to="/"
+              className="text-(--accent) font-semibold text-sm tracking-wide select-none hover:opacity-90"
+            >
+              {'</>'} Python OOP
+            </Link>
+          </BreadcrumbItem>
+          {isChallengePage && challengeLabel && (
+            <>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="text-sm">{challengeLabel}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </>
+          )}
+        </BreadcrumbList>
+      </Breadcrumb>
       {isChallengePage && (
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={triggerRun}>
             Run
           </Button>
-          <Button variant="default" size="sm">
+          <Button variant="default" size="sm" onClick={triggerSubmit}>
             Submit
           </Button>
         </div>

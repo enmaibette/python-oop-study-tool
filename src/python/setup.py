@@ -9,5 +9,7 @@ def _setup(files, module_dir):
             os.makedirs(f'/{dir_}', exist_ok=True)
         with open(f'/{path}', 'w') as f:
             f.write(content.replace('\t', '    '))
-    if module_dir and module_dir not in sys.path:
+    if module_dir not in sys.path:
         sys.path.insert(0, module_dir)
+
+    os.chdir(module_dir)

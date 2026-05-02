@@ -1,7 +1,6 @@
 ---
 id: '2'
 title: 'Methode - Add a Method to the Dog class'
-difficulty: 'Easy'
 ---
 
 ## Description

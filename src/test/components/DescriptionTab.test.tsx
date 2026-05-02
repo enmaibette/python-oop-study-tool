@@ -33,11 +33,11 @@ const descriptionMarkdown = [
 const mockChallenge: Challenge = {
   id: '4',
   title: 'Create a Simple Bank Account Class',
-  difficulty: 'Easy',
   descriptionMarkdown,
   starterCode: [{ path: 'solution.py', content: 'class BankAccount:\n    pass\n' }],
   hints: [],
   testCases: [],
+  testCasesPy: '',
 };
 
 describe('DescriptionTab', () => {
@@ -46,11 +46,6 @@ describe('DescriptionTab', () => {
     expect(
       screen.getByRole('heading', { name: 'Create a Simple Bank Account Class', level: 2 }),
     ).toBeInTheDocument();
-  });
-
-  it('renders a DifficultyBadge with the correct difficulty label', () => {
-    render(<DescriptionTab challenge={mockChallenge} />);
-    expect(screen.getByText('Easy')).toBeInTheDocument();
   });
 
   it('renders the markdown description content', () => {
@@ -74,11 +69,5 @@ describe('DescriptionTab', () => {
     render(<DescriptionTab challenge={mockChallenge} />);
     const codeBlock = screen.getByTestId('code-block');
     expect(codeBlock).toHaveTextContent('account = BankAccount("Alice", 1000)');
-  });
-
-  it('renders "Medium" badge for a Medium-difficulty challenge', () => {
-    const mediumChallenge: Challenge = { ...mockChallenge, difficulty: 'Medium' };
-    render(<DescriptionTab challenge={mediumChallenge} />);
-    expect(screen.getByText('Medium')).toBeInTheDocument();
   });
 });
