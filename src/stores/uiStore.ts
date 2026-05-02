@@ -16,7 +16,6 @@ interface UIState {
   setConsolePanelOpen: (open: boolean) => void;
   testCaseResults: TestCase[];
   setTestCaseResults: (results: TestCase[]) => void;
-  clearTestCaseResults: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -56,8 +55,5 @@ export const useUIStore = create<UIState>((set) => ({
 
   setTestCaseResults: (results: TestCase[]) => {
     set({ testCaseResults: results });
-  },
-  clearTestCaseResults: () => {
-    set({ testCaseResults: [] });
-  },
+  }
 }));

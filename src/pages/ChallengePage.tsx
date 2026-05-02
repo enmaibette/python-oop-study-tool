@@ -23,7 +23,6 @@ export default function ChallengePage() {
   const setConsolePanelOpen = useUIStore((state) => state.setConsolePanelOpen);
   const isConsolePanelOpen = useUIStore((state) => state.isConsolePanelOpen);
   const clearOutput = useUIStore((state) => state.clearOutput);
-  const clearTestCaseResults = useUIStore((state) => state.clearTestCaseResults);
   const setTestCaseResults = useUIStore((state) => state.setTestCaseResults);
 
   const challenge = useChallenge(id);
