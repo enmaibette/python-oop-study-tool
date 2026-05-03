@@ -33,6 +33,7 @@ const descriptionMarkdown = [
 const mockChallenge: Challenge = {
   id: '4',
   title: 'Create a Simple Bank Account Class',
+  canvas: false,
   descriptionMarkdown,
   starterCode: [{ path: 'solution.py', content: 'class BankAccount:\n    pass\n' }],
   hints: [],

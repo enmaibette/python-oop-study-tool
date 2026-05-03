@@ -7,6 +7,7 @@ import type { Challenge } from '@/types';
 const mockChallenge: Challenge = {
   id: '1',
   title: 'Create a Class – Dog',
+  canvas: false,
   descriptionMarkdown: '## Description\n\nTest description',
   starterCode: [],
   hints: [],

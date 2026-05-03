@@ -16,6 +16,8 @@ const defaultProps = {
   testCases: [],
   onOpenChange: vi.fn(),
   isOpen: true,
+  canvas: false,
+  challengeId: '1'
 };
 
 describe('ConsolePanel', () => {
