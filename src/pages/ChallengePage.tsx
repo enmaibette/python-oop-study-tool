@@ -66,6 +66,8 @@ export default function ChallengePage() {
               testCases={testCases}
               onOpenChange={setConsolePanelOpen}
               isOpen={isConsolePanelOpen}
+              canvas={challenge.canvas}
+              challengeId={id}
             />
           }
       />

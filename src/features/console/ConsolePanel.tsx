@@ -3,6 +3,7 @@ import { OutputTab } from './OutputTab';
 import { TestCasesTab } from './TestCasesTab';
 import type { ConsoleTab, TestCase } from '@/types';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { CanvasTab } from '@/features/console/CanvasTab.tsx';
 
 interface ConsolePanelProps {
   activeTab: ConsoleTab;
@@ -11,6 +12,8 @@ interface ConsolePanelProps {
   testCases: TestCase[];
   onOpenChange: (open: boolean) => void;
   isOpen: boolean;
+  canvas: boolean;
+  challengeId: string;
 }
 
 export function ConsolePanel({
@@ -20,6 +23,8 @@ export function ConsolePanel({
   testCases,
   onOpenChange,
   isOpen,
+  canvas,
+  challengeId,
 }: ConsolePanelProps) {
   return (
     <div className="flex flex-col h-full bg-(--background) border-t border-(--border)">
@@ -35,6 +40,7 @@ export function ConsolePanel({
           <TabsList variant="line" className="px-2 flex-1">
             <TabsTrigger value="output">Output</TabsTrigger>
             <TabsTrigger value="testcases">Test Cases</TabsTrigger>
+            <TabsTrigger hidden={!canvas}  value="canvas">Canvas</TabsTrigger>
           </TabsList>
           <button
             type="button"
@@ -54,6 +60,9 @@ export function ConsolePanel({
 
             <TabsContent value="testcases" className="flex-1 min-h-0 overflow-hidden">
               <TestCasesTab testCases={testCases} />
+            </TabsContent>
+            <TabsContent forceMount value={'canvas'} className="flex-1 min-h-0 overflow-hidden data-[state=inactive]:hidden">
+              <CanvasTab clearKey={challengeId} />
             </TabsContent>
           </>
         )}

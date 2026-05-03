@@ -1,6 +1,7 @@
 ---
 id: '1'
 title: 'Create a Class - Dog'
+canvas: 'true'
 ---
 
 ## Description

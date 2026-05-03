@@ -95,13 +95,13 @@ function parseFrontmatter(markdown: string): { frontmatter: Record<string, strin
 }
 
 
-function parseDescriptionDocument(markdown: string): { id: string; title: string; descriptionMarkdown: string } {
+function parseDescriptionDocument(markdown: string): { id: string; title: string; canvas: boolean; descriptionMarkdown: string } {
   const { frontmatter, body } = parseFrontmatter(markdown);
-  const { id, title} = frontmatter;
+  const { id, title, canvas} = frontmatter;
   if (!id || !title) {
-    throw new Error('Challenge description.md is missing required metadata (id, title).');
+    throw new Error('Challenge description.md is missing required metadata (id, title, canvas).');
   }
-  return { id, title, descriptionMarkdown: body.trim() };
+  return { id, title, canvas: Boolean(canvas),descriptionMarkdown: body.trim() };
 }
 
 function parseHints(markdown: string): Hint[] {
@@ -150,6 +150,7 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
   return {
     id: prefix,
     title: parsed.title,
+    canvas: parsed.canvas,
     descriptionMarkdown: parsed.descriptionMarkdown,
     starterCode,
     hints: parseHints(files.hintsMarkdown),

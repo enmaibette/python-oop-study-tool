@@ -6,6 +6,11 @@ import runnerPy from '@/python/runner.py?raw';
 let pyodide: PyodideInterface | null = null;
 let isReady = false;
 
+const canvas = {
+  draw_line: (x1: number, y1: number, x2: number, y2: number, color = 'black') => {
+    self.postMessage({ type: 'gfx', cmd: 'drawLine', args: [x1, y1, x2, y2, color] });
+  },
+};
 const initializePyodide = async () => {
   pyodide = await loadPyodide({
     indexURL: `https://cdn.jsdelivr.net/pyodide/v${version}/full/`,
@@ -13,15 +18,22 @@ const initializePyodide = async () => {
   await pyodide.runPythonAsync(setupPy);
   pyodide.FS.writeFile('/runner.py', runnerPy);
   await pyodide.runPythonAsync(`import sys\nif '/' not in sys.path: sys.path.insert(0, '/')`);
+  pyodide!.registerJsModule('python_oop_canvas', canvas);
+  await pyodide!.runPythonAsync(
+    'import python_oop_canvas, builtins; builtins.python_oop_canvas = python_oop_canvas'
+  );
   isReady = true;
   self.postMessage({ type: 'ready' });
 };
+
+
 
 const runCode = async (
   code: string,
   activeFilePath: string | null,
   files: Record<string, string>
 ) => {
+  self.postMessage({ type: 'gfx', cmd: 'clear', args: [] });
   const sanitizedCode = code.replace(/\t/g, '    ');
   const dir = activeFilePath?.split('/').slice(0, -1).join('/') ?? '';
 

@@ -1,0 +1,77 @@
+import { useEffect, useRef } from 'react';
+import { useWorkerStore } from '@/stores/workerStore.ts';
+
+type GfxMsg =
+  | { type: 'gfx'; cmd: 'drawLine'; args: [number, number, number, number, string] }
+  | { type: 'gfx'; cmd: 'clear'; args: [] };
+
+type GfxRedraw =
+  | { type: 'gfx'; cmd: 'drawLine'; args: [number, number, number, number, string] };
+
+export function CanvasTab({ clearKey }: { clearKey: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const worker = useWorkerStore((state) => state.worker);
+  const commandsRef = useRef<GfxRedraw[]>([]);
+
+  useEffect(() => {
+    commandsRef.current = [];
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  }, [clearKey]);
+
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!ctx) return;
+
+    const handlers = {
+      drawLine: (x1: number, y1: number, x2: number, y2: number, color: string) => {
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      },
+    };
+
+    // redraw all commands to redraw the canvas after a resize
+    const redraw = () => {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      commandsRef.current.forEach((msg) => {
+        const fn = handlers[msg.cmd] as (...args: unknown[]) => void;
+        fn?.(...msg.args);
+      });
+    };
+
+    const onMessage = (e: MessageEvent<GfxMsg>) => {
+      if (e.data.type !== 'gfx') return;
+      if (e.data.cmd === 'clear') {
+        commandsRef.current = [];
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        return;
+      }
+      commandsRef.current.push(e.data);
+      const fn = handlers[e.data.cmd] as (...args: unknown[]) => void;
+      fn?.(...e.data.args);
+    };
+
+    worker?.addEventListener('message', onMessage);
+
+    const canvas = canvasRef.current!;
+    const parent = canvas.parentElement!;
+    const ro = new ResizeObserver(() => {
+      const { width, height } = canvas.getBoundingClientRect();
+      if (width === 0 || height === 0) return;
+      canvas.width = width;
+      canvas.height = height;
+      redraw();
+    });
+    ro.observe(parent);
+
+    return () => {
+      worker?.removeEventListener('message', onMessage);
+      ro.disconnect();
+    };
+  }, [worker]);
+
+  return <canvas ref={canvasRef} width={300} height={200} className={'bg-white w-full h-full'} />;
+}

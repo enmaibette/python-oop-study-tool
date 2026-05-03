@@ -1,6 +1,7 @@
 import { useChallengeStore } from '@/stores/challengeStore';
 import { useUIStore } from '@/stores/uiStore';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+import { useWorkerStore } from '@/stores/workerStore.ts';
 
 interface UseRunCodeReturn {
   triggerRun: () => void;
@@ -16,15 +17,11 @@ export function useRunCode(): UseRunCodeReturn {
   const setTestCaseResults = useUIStore((state) => state.setTestCaseResults);
   const editorContentMap = useChallengeStore((state) => state.editorContentMap);
   const activeFilePath = useChallengeStore((state) => state.activeFilePath);
-  const workerRef = useRef<Worker | null>(null);
+  const workerRef = useWorkerStore((state) => state.worker);
 
   useEffect(() => {
-    workerRef.current = new Worker(
-      new URL('../workers/pyodide.worker.tsx', import.meta.url),
-      { type: "module"}
-    )
-    workerRef.current.postMessage({ type: 'init' });
-    workerRef.current.onmessage = (event) => {
+    if (!workerRef) return;
+    const handler = (event: MessageEvent) => {
       const { type } = event.data;
       if (type === 'result') {
         appendOutputLines(event.data.stdout.split('\n'));
@@ -43,13 +40,14 @@ export function useRunCode(): UseRunCodeReturn {
         setConsoleActiveTab('output');
       }
     };
-    return () => workerRef.current?.terminate();
-
-  }, []);
+    workerRef.addEventListener('message', handler);
+    return () => workerRef.removeEventListener('message', handler);
+  }, [workerRef]);
 
   const triggerRun = () => {
     clearOutput();
-    workerRef.current?.postMessage({
+
+    workerRef?.postMessage({
       type: 'run',
       code: editorContent,
       files: editorContentMap,
@@ -64,7 +62,7 @@ export function useRunCode(): UseRunCodeReturn {
     if (!currentActive) return;
     clearOutput();
 
-    workerRef.current?.postMessage({
+    workerRef?.postMessage({
       type: 'submit',
       code: editorContent,
       files: editorContentMap,

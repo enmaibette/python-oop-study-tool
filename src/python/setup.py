@@ -1,4 +1,5 @@
 import os, sys
+import builtins
 
 def _setup(files, module_dir):
     for path in list(files):
@@ -12,4 +13,5 @@ def _setup(files, module_dir):
     if module_dir not in sys.path:
         sys.path.insert(0, module_dir)
 
-    os.chdir(module_dir)
+    if module_dir:
+        os.chdir(module_dir)

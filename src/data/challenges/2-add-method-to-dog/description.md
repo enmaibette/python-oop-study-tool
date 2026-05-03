@@ -1,6 +1,7 @@
 ---
 id: '2'
 title: 'Methode - Add a Method to the Dog class'
+canvas: 'true'
 ---
 
 ## Description

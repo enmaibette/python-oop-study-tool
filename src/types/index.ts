@@ -1,5 +1,5 @@
 export type TestCaseStatus = 'pending' | 'pass' | 'fail';
-export type ConsoleTab = 'output' | 'testcases';
+export type ConsoleTab = 'output' | 'testcases' | 'canvas';
 
 export interface TestCase {
   id: string;
@@ -20,6 +20,7 @@ export interface StarterCode {
 export interface Challenge {
   id: string;
   title: string;
+  canvas: boolean;
   descriptionMarkdown: string;
   starterCode: StarterCode[];
   hints: Hint[];
