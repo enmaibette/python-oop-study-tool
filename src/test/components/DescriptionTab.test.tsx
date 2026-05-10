@@ -39,6 +39,7 @@ const mockChallenge: Challenge = {
   hints: [],
   testCases: [],
   testCasesPy: '',
+  assets: [{path: '', url: ''}],
 };
 
 describe('DescriptionTab', () => {
