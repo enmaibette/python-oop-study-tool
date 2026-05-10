@@ -4,6 +4,7 @@ interface ChallengeFiles {
   descriptionMarkdown?: string;
   hintsMarkdown?: string;
   exampleCodeFiles: Array<{ path: string; content: string }>;
+  assetFiles: Array<{ path: string; url: string }>;
   testCasePy?: string;
 }
 
@@ -23,6 +24,12 @@ const exampleCodeModules = import.meta.glob('./*/exampleCode/**', {
   eager: true,
   import: 'default',
   query: '?raw',
+}) as Record<string, string>;
+
+const assetUrlModules = import.meta.glob('./*/exampleCode/**', {
+  eager: true,
+  import: 'default',
+  query: '?url',
 }) as Record<string, string>;
 
 const testcaseModules = import.meta.glob('./*/testcase.py', {
@@ -49,7 +56,7 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
   const getOrCreate = (folder: string) => {
     const existing = files.get(folder);
     if (existing) return existing;
-    const created: ChallengeFiles = { exampleCodeFiles: [] };
+    const created: ChallengeFiles = { exampleCodeFiles: [], assetFiles: [] };
     files.set(folder, created);
     return created;
   };
@@ -61,7 +68,14 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
     getOrCreate(getFolderName(filePath)).hintsMarkdown = content;
   }
   for (const [filePath, content] of Object.entries(exampleCodeModules)) {
-    getOrCreate(getFolderName(filePath)).exampleCodeFiles.push({ path: filePath, content });
+    if (filePath.endsWith('.py')) {
+      getOrCreate(getFolderName(filePath)).exampleCodeFiles.push({ path: filePath, content });
+    }
+  }
+  for (const [filePath, url] of Object.entries(assetUrlModules)) {
+    if (!filePath.endsWith('.py')) {
+      getOrCreate(getFolderName(filePath)).assetFiles.push({ path: filePath, url });
+    }
   }
   for (const [filePath, content] of Object.entries(testcaseModules)) {
     getOrCreate(getFolderName(filePath)).testCasePy = content;
@@ -144,8 +158,12 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
   const starterCode = files.exampleCodeFiles.map(f => ({
     path: f.path.replace(/^\.\//, '').replace(/\/exampleCode\//, '/'),
     content: f.content.replace(/\r\n/g, '\n').replace(/\r/g, '\n'),
-  }))
+  }));
 
+  const assets = files.assetFiles.map(f => ({
+    path: f.path.replace(/^\.\//, '').replace(/\/exampleCode\//, '/'),
+    url: f.url,
+  }));
 
   return {
     id: prefix,
@@ -156,6 +174,7 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
     hints: parseHints(files.hintsMarkdown),
     testCases: parseTestCasesFromPy(files.testCasePy),
     testCasesPy: files.testCasePy!,
+    assets,
   };
 }
 

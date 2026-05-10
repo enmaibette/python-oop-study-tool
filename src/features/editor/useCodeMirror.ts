@@ -50,7 +50,7 @@ export function useCodeMirror({ initialDoc, onChange }: UseCodeMirrorOptions) {
     if (!view || initialDoc === lastDocRef.current) return;
 
     const currentDoc = view.state.doc.toString();
-    // Only update if content is different (challenge switch, not user typing)
+    // Only update if content is different (challenge switch)
     if (currentDoc !== initialDoc) {
       view.dispatch({
         changes: {

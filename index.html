@@ -2,7 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script src="%BASE_URL%coi-serviceworker.js"></script>
+    <script>
+      if (location.hostname !== 'localhost') {
+        const s = document.createElement('script');
+        s.src = '%BASE_URL%coi-serviceworker.js';
+        document.head.appendChild(s);
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />

@@ -24,3 +24,11 @@ export async function saveFilesystem(challengeId: string, fileSystemRecord: File
   const db = await getDB()
   await db.put(STORE, fileSystemRecord, challengeId)
 }
+export async function loadBinaryFiles(challengeId: string): Promise<Record<string, ArrayBuffer> | undefined> {
+  const db = await getDB()
+  return db.get(STORE, `${challengeId}:binary`)
+}
+export async function saveBinaryFiles(challengeId: string, binaryFiles: Record<string, ArrayBuffer>) {
+  const db = await getDB()
+  await db.put(STORE, binaryFiles, `${challengeId}:binary`)
+}

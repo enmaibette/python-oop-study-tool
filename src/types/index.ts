@@ -26,12 +26,13 @@ export interface Challenge {
   hints: Hint[];
   testCases: TestCase[];
   testCasesPy: string;
+  assets: { path: string; url: string }[];
 }
 
 export type FileTreeItem = {
-  name: string
-  path: string
+  name: string;
+  path: string;
 } & (
-  | {type: 'file'; children?: never}
-  | {type: 'folder'; children: FileTreeItem[]}
-  )
+  | { type: 'file'; readonly?: boolean; children?: never }
+  | { type: 'folder'; children: FileTreeItem[] }
+)

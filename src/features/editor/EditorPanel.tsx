@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { ChevronRightIcon, FileIcon, Folder, FolderIcon, X } from 'lucide-react';
+import { ChevronRightIcon, FileIcon, Folder, FolderIcon, LockIcon, X } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useCodeMirror } from '@/features/editor/useCodeMirror.ts';
 import { useChallengeStore } from '@/stores/challengeStore.ts';
@@ -92,6 +92,20 @@ export const EditorPanel = memo(function EditorPanel() {
             </div>
           </CollapsibleContent>
         </Collapsible>
+      );
+    }
+    if (item.readonly) {
+      return (
+        <Button
+          key={item.path}
+          variant="link"
+          size="sm"
+          disabled
+          className="w-full justify-start gap-2 text-foreground opacity-60 cursor-default"
+        >
+          <LockIcon className="h-3 w-3" />
+          <span>{item.name}</span>
+        </Button>
       );
     }
     return (

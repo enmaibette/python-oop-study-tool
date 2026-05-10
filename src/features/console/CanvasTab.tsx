@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { useWorkerStore } from '@/stores/workerStore.ts';
 
+
 type GfxMsg =
   | { type: 'gfx'; cmd: 'drawLine'; args: [number, number, number, number, string] }
+  | { type: 'gfx'; cmd: 'drawImage'; args: [ArrayBuffer, number, number, number | undefined, number | undefined] }
   | { type: 'gfx'; cmd: 'clear'; args: [] };
 
 type GfxRedraw =
-  | { type: 'gfx'; cmd: 'drawLine'; args: [number, number, number, number, string] };
+  | { type: 'gfx'; cmd: 'drawLine'; args: [number, number, number, number, string] }
+  | { type: 'gfx'; cmd: 'drawImage'; args: [ImageBitmap, number, number, number | undefined, number | undefined] };
 
 export function CanvasTab({ clearKey }: { clearKey: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -31,6 +34,13 @@ export function CanvasTab({ clearKey }: { clearKey: string }) {
         ctx.lineTo(x2, y2);
         ctx.stroke();
       },
+      drawImage: (image: ImageBitmap, dx: number, dy: number, dWidth?: number, dHeight?: number) => {
+        if (dWidth != null && dHeight != null) {
+          ctx.drawImage(image, dx, dy, dWidth, dHeight);
+        } else {
+          ctx.drawImage(image, dx, dy);
+        }
+      },
     };
 
     // redraw all commands to redraw the canvas after a resize
@@ -42,11 +52,19 @@ export function CanvasTab({ clearKey }: { clearKey: string }) {
       });
     };
 
-    const onMessage = (e: MessageEvent<GfxMsg>) => {
+    const onMessage = async (e: MessageEvent<GfxMsg>) => {
       if (e.data.type !== 'gfx') return;
       if (e.data.cmd === 'clear') {
         commandsRef.current = [];
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        return;
+      }
+      if (e.data.cmd === 'drawImage') {
+        const [buffer, dx, dy, dWidth, dHeight] = e.data.args;
+        const bitmap = await createImageBitmap(new Blob([buffer]));
+        const cmd: GfxRedraw = { type: 'gfx', cmd: 'drawImage', args: [bitmap, dx, dy, dWidth, dHeight] };
+        commandsRef.current.push(cmd);
+        handlers.drawImage(bitmap, dx, dy, dWidth, dHeight);
         return;
       }
       commandsRef.current.push(e.data);

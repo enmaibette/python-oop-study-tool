@@ -17,6 +17,7 @@ export function useRunCode(): UseRunCodeReturn {
   const setTestCaseResults = useUIStore((state) => state.setTestCaseResults);
   const editorContentMap = useChallengeStore((state) => state.editorContentMap);
   const activeFilePath = useChallengeStore((state) => state.activeFilePath);
+  const binaryFiles = useChallengeStore((state) => state.binaryFiles);
   const workerRef = useWorkerStore((state) => state.worker);
 
   useEffect(() => {
@@ -46,12 +47,12 @@ export function useRunCode(): UseRunCodeReturn {
 
   const triggerRun = () => {
     clearOutput();
-
     workerRef?.postMessage({
       type: 'run',
       code: editorContent,
       files: editorContentMap,
       activeFilePath,
+      binaryFiles,
     });
     setConsoleActiveTab('output');
   };
@@ -68,6 +69,7 @@ export function useRunCode(): UseRunCodeReturn {
       files: editorContentMap,
       activeFilePath,
       testcasePy: currentActive.testCasesPy,
+      binaryFiles,
     });
     setConsoleActiveTab('testcases');
 
