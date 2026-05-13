@@ -12,7 +12,8 @@ const mockChallenge: Challenge = {
   starterCode: [],
   hints: [],
   testCases: [],
-  testCasesPy: ''
+  testCasesPy: '',
+  assets: [{path: '', url: ''}]
 };
 
 describe('ChallengeRow', () => {

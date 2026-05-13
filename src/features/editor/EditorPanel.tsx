@@ -18,6 +18,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '../../components/common/CustomDrawer.tsx';
+import { NO_FILES_OPEN_PLACEHOLDER } from '@/lib/constants.ts';
 
 function flatFiles(tree: FileTreeItem[]): (FileTreeItem & { type: 'file' })[] {
   return tree.flatMap((item) =>
@@ -185,7 +186,8 @@ export const EditorPanel = memo(function EditorPanel() {
 
       <TabsContent value={activeFilePath ?? ''} className="flex-1 overflow-y-auto">
         <div className="flex h-full w-full overflow-hidden bg-(--background)">
-          <div ref={editorRef} className="flex-1 h-full" />
+          <div ref={editorRef} className={`flex-1 h-full ${openFiles.length === 0 ? 'hidden' : ''}`} />
+          {openFiles.length === 0 && <div className={'flex w-full items-center justify-center'}>{NO_FILES_OPEN_PLACEHOLDER}</div>}
         </div>
       </TabsContent>
     </Tabs>
