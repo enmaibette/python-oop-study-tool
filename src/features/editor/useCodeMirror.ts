@@ -6,17 +6,20 @@ import { buildExtensions } from '@/lib/codemirrorExtensions.ts';
 interface UseCodeMirrorOptions {
   initialDoc: string;
   onChange: (value: string) => void;
+  onRun?: () => void;
 }
 
-export function useCodeMirror({ initialDoc, onChange }: UseCodeMirrorOptions) {
+export function useCodeMirror({ initialDoc, onChange, onRun }: UseCodeMirrorOptions) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
+  const onRunRef = useRef(onRun);
   const lastDocRef = useRef(initialDoc);
 
-  // Keep the callback ref current without re-running the main effect
+  // Keep the callback refs current without re-running the main effect
   useEffect(() => {
     onChangeRef.current = onChange;
+    onRunRef.current = onRun;
   });
 
   // Initialize editor once
@@ -25,7 +28,10 @@ export function useCodeMirror({ initialDoc, onChange }: UseCodeMirrorOptions) {
 
     const state = EditorState.create({
       doc: initialDoc,
-      extensions: buildExtensions((value) => onChangeRef.current(value)),
+      extensions: buildExtensions(
+        (value) => onChangeRef.current(value),
+        () => onRunRef.current?.(),
+      ),
     });
 
     const view = new EditorView({

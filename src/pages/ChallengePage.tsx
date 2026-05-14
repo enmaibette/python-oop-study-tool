@@ -6,6 +6,7 @@ import { ConsolePanel } from '@/features/console/ConsolePanel';
 import { useChallenge } from '@/hooks/useChallenge';
 import { useChallengeStore } from '@/stores/challengeStore';
 import { useUIStore } from '@/stores/uiStore';
+import { useWorkerMessages } from '@/hooks/useWorkerMessages';
 import { EditorPanel } from '@/features/editor/EditorPanel.tsx';
 
 export default function ChallengePage() {
@@ -27,6 +28,8 @@ export default function ChallengePage() {
 
   const challenge = useChallenge(id);
   const testCases = useUIStore((state) => state.testCaseResults);
+
+  useWorkerMessages();
 
   useEffect(() => {
     if (id && challenge) {

@@ -3,6 +3,7 @@ import { ChevronRightIcon, FileIcon, Folder, FolderIcon, LockIcon, X } from 'luc
 import { CustomTabs, TabsList, TabsTrigger, TabsContent } from '../../components/common/CustomTabs';
 import { useCodeMirror } from '@/features/editor/useCodeMirror.ts';
 import { useChallengeStore } from '@/stores/challengeStore.ts';
+import { useRunCode } from '@/hooks/useRunCode.ts';
 import {
   Collapsible,
   CollapsibleContent,
@@ -41,9 +42,11 @@ export const EditorPanel = memo(function EditorPanel() {
 
   const openFiles = flatFiles(fileTree).filter((f) => openFilePaths.includes(f.path));
 
+  const { triggerRun } = useRunCode();
   const { containerRef: editorRef } = useCodeMirror({
     initialDoc: editorContent,
     onChange: setEditorContent,
+    onRun: triggerRun,
   });
 
   const tabsListRef = useRef<HTMLDivElement>(null);
@@ -184,9 +187,9 @@ export const EditorPanel = memo(function EditorPanel() {
         </CustomDrawer>
       </div>
 
-      <TabsContent value={activeFilePath ?? ''} className="flex-1 overflow-y-auto">
-        <div className="flex h-full w-full overflow-hidden bg-(--background)">
-          <div ref={editorRef} className={`flex-1 h-full ${openFiles.length === 0 ? 'hidden' : ''}`} />
+      <TabsContent value={activeFilePath ?? ''} className="flex-1 overflow-hidden">
+        <div className="flex h-full w-full bg-(--background)">
+          <div ref={editorRef} className={`flex-1 h-full w-full ${openFiles.length === 0 ? 'hidden' : ''}`} />
           {openFiles.length === 0 && <div className={'flex w-full items-center justify-center'}>{NO_FILES_OPEN_PLACEHOLDER}</div>}
         </div>
       </TabsContent>

@@ -1,19 +1,19 @@
 import { keymap, lineNumbers, EditorView } from "@codemirror/view";
-import { defaultKeymap, historyKeymap, history } from "@codemirror/commands";
+import { defaultKeymap, historyKeymap, history, indentWithTab } from "@codemirror/commands";
 import { python } from "@codemirror/lang-python";
 import { indentUnit } from "@codemirror/language";
 import { autocompletion } from "@codemirror/autocomplete";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorState, Extension } from "@codemirror/state";
 
-export function buildExtensions(onChange: (value: string) => void): Extension[] {
+export function buildExtensions(onChange: (value: string) => void, onRun?: () => void): Extension[] {
   return [
     lineNumbers(),
     history(),
     python(),
     autocompletion(),
     oneDark,
-    keymap.of([...defaultKeymap, ...historyKeymap]),
+    keymap.of([{ key: 'Ctrl-Enter', run: () => { onRun?.(); return true; } }, indentWithTab, ...defaultKeymap, ...historyKeymap]),
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
         onChange(update.state.doc.toString());
