@@ -1,7 +1,7 @@
 import os, sys
 import builtins
 from pyodide.ffi import to_js
-import python_oop_canvas as _js_canvas
+import canvas as _js_canvas
 
 def _setup(files, module_dir):
     for path in files:
@@ -29,4 +29,4 @@ class _Canvas:
         _js_canvas.draw_line(x1, y1, x2, y2, color)
 
 
-builtins.python_oop_canvas = _Canvas()
+builtins.canvas = _Canvas()

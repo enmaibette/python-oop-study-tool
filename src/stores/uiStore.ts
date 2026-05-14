@@ -16,6 +16,8 @@ interface UIState {
   setConsolePanelOpen: (open: boolean) => void;
   testCaseResults: TestCase[];
   setTestCaseResults: (results: TestCase[]) => void;
+  canvasClearKey: number;
+  bumpCanvasClearKey: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -25,6 +27,7 @@ export const useUIStore = create<UIState>((set) => ({
   outputLines: [],
   isConsolePanelOpen: true,
   testCaseResults: [],
+  canvasClearKey: 0,
 
   setLeftPanelOpen: (open: boolean) => {
     set({ isLeftPanelOpen: open });
@@ -55,5 +58,9 @@ export const useUIStore = create<UIState>((set) => ({
 
   setTestCaseResults: (results: TestCase[]) => {
     set({ testCaseResults: results });
-  }
+  },
+
+  bumpCanvasClearKey: () => {
+    set((state) => ({ canvasClearKey: state.canvasClearKey + 1 }));
+  },
 }));

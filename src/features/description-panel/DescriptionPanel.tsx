@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { X, FileText, Lightbulb } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { CustomTabs, TabsList, TabsTrigger, TabsContent } from '../../components/common/CustomTabs';
 import { DescriptionTab } from './DescriptionTab';
 import { HintTab } from './HintTab';
 import type { Challenge } from '@/types';
@@ -23,7 +23,7 @@ export const DescriptionPanel = memo(function DescriptionPanel({
   console.log("isOpen", isOpen)
   return (
     <div className="flex flex-col h-full bg-(--surface) border-r border-(--border)">
-      <Tabs
+      <CustomTabs
         value={activeTab}
         orientation={isOpen ? 'horizontal' : 'vertical'}
         onValueChange={(v) => {
@@ -32,15 +32,17 @@ export const DescriptionPanel = memo(function DescriptionPanel({
         }}
         className="flex flex-col h-full"
       >
-        <div className={isOpen
-          ? 'flex items-center border-b border-(--border) shrink-0'
-          : 'flex flex-col items-center py-1 shrink-0'
-        }>
+        <div
+          className={
+            isOpen
+              ? 'flex items-center border-b border-(--border) shrink-0'
+              : 'flex flex-col items-center py-1 shrink-0'
+          }
+        >
           <TabsList
-            variant="line"
-            className={isOpen
-              ? 'px-2 flex-1 border-b-0'
-              : 'flex flex-col h-auto bg-transparent gap-1 p-1'
+            variant={isOpen ? 'line' : 'vertical'}
+            className={
+              isOpen ? 'px-2 flex-1 border-b-0' : 'flex flex-col h-auto bg-transparent gap-1 p-1'
             }
           >
             <TabsTrigger value="description">
@@ -50,14 +52,16 @@ export const DescriptionPanel = memo(function DescriptionPanel({
               {isOpen ? 'Hint' : <Lightbulb className="h-4 w-4" />}
             </TabsTrigger>
           </TabsList>
-          {isOpen && (<button
-            type="button"
-            aria-label="Close description panel"
-            onClick={() => onOpenChange(false)}
-            className="p-2 text-(--muted) hover:text-(--text)"
-          >
-            <X className="h-4 w-4" />
-          </button>)}
+          {isOpen && (
+            <button
+              type="button"
+              aria-label="Close description panel"
+              onClick={() => onOpenChange(false)}
+              className="p-2 text-(--muted) hover:text-(--text)"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
 
         {isOpen && (
@@ -71,7 +75,7 @@ export const DescriptionPanel = memo(function DescriptionPanel({
             </TabsContent>
           </>
         )}
-      </Tabs>
+      </CustomTabs>
     </div>
   );
 });

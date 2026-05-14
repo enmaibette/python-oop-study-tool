@@ -22,7 +22,7 @@ const initializePyodide = async () => {
   pyodide = await loadPyodide({
     indexURL: `https://cdn.jsdelivr.net/pyodide/v${version}/full/`,
   });
-  pyodide!.registerJsModule('python_oop_canvas', canvas);
+  pyodide!.registerJsModule('canvas', canvas);
   await pyodide.runPythonAsync(setupPy);
   pyodide.FS.writeFile('/runner.py', runnerPy);
   await pyodide.runPythonAsync(`import sys\nif '/' not in sys.path: sys.path.insert(0, '/')`);

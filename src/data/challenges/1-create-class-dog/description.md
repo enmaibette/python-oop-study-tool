@@ -6,13 +6,25 @@ canvas: 'true'
 
 ## Description
 
-In this challenge, you will create a basic `Dog` class that demonstrates fundamental object-oriented programming concepts in Python. A class is a blueprint for creating objects, and each object can have its own attributes and behaviors.
+### Advantages of OOP
+
+Object-Oriented Programming organizes code around **objects** — bundles of data and behavior.
+Instead of managing separate variables for every entity, a class groups them together.
+
+Key advantages:
+- **Modularity** — each class is self-contained
+- **Reusability** — define once, use many times
+- **Maintainability** — change one class without breaking others
+
+---
+
 
 ### Requirements
+- Define a class `Car`
+- Add to the class `Car` two class attributes: `brand` and `speed`
+- Create two instances with different values
 
-- Create a class named `Dog`
-- Implement an `__init__` method that accepts a `name` parameter
-- Store the name as an instance attribute `self.name`
+
 
 ### Example
 
@@ -20,4 +32,3 @@ In this challenge, you will create a basic `Dog` class that demonstrates fundame
 dog = Dog("Rex")
 print(dog.name)  # Output: Rex
 ```
-

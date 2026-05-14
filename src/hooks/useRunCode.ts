@@ -6,6 +6,7 @@ import { useWorkerStore } from '@/stores/workerStore.ts';
 interface UseRunCodeReturn {
   triggerRun: () => void;
   triggerSubmit: () => void;
+  triggerReset: () => void;
 }
 
 export function useRunCode(): UseRunCodeReturn {
@@ -19,6 +20,8 @@ export function useRunCode(): UseRunCodeReturn {
   const activeFilePath = useChallengeStore((state) => state.activeFilePath);
   const binaryFiles = useChallengeStore((state) => state.binaryFiles);
   const workerRef = useWorkerStore((state) => state.worker);
+  const resetEditorToStarter = useChallengeStore((state) => state.resetEditorToStarter);
+  const bumpCanvasClearKey = useUIStore((state) => state.bumpCanvasClearKey);
 
   useEffect(() => {
     if (!workerRef) return;
@@ -72,9 +75,13 @@ export function useRunCode(): UseRunCodeReturn {
       binaryFiles,
     });
     setConsoleActiveTab('testcases');
-
-
   };
 
-  return { triggerRun, triggerSubmit };
+  const triggerReset = (): void => {
+    resetEditorToStarter();
+    clearOutput();
+    bumpCanvasClearKey();
+  };
+
+  return { triggerRun, triggerSubmit, triggerReset };
 }

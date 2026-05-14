@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useWorkerStore } from '@/stores/workerStore.ts';
+import { useUIStore } from '@/stores/uiStore';
 
 
 type GfxMsg =
@@ -15,12 +16,13 @@ export function CanvasTab({ clearKey }: { clearKey: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const worker = useWorkerStore((state) => state.worker);
   const commandsRef = useRef<GfxRedraw[]>([]);
+  const canvasClearKey = useUIStore((state) => state.canvasClearKey);
 
   useEffect(() => {
     commandsRef.current = [];
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  }, [clearKey]);
+  }, [clearKey, canvasClearKey]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');

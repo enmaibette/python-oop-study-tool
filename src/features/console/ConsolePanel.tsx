@@ -1,4 +1,4 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { CustomTabs, TabsList, TabsTrigger, TabsContent } from '../../components/common/CustomTabs';
 import { OutputTab } from './OutputTab';
 import { TestCasesTab } from './TestCasesTab';
 import type { ConsoleTab, TestCase } from '@/types';
@@ -28,7 +28,7 @@ export function ConsolePanel({
 }: ConsolePanelProps) {
   return (
     <div className="flex flex-col h-full bg-(--background) border-t border-(--border)">
-      <Tabs
+      <CustomTabs
         value={activeTab}
         onValueChange={(v) => {
           if (!isOpen) onOpenChange(true);
@@ -66,7 +66,7 @@ export function ConsolePanel({
             </TabsContent>
           </>
         )}
-      </Tabs>
+      </CustomTabs>
     </div>
   );
 }

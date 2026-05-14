@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { ChevronRightIcon, FileIcon, Folder, FolderIcon, LockIcon, X } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { CustomTabs, TabsList, TabsTrigger, TabsContent } from '../../components/common/CustomTabs';
 import { useCodeMirror } from '@/features/editor/useCodeMirror.ts';
 import { useChallengeStore } from '@/stores/challengeStore.ts';
 import {
@@ -128,7 +128,7 @@ export const EditorPanel = memo(function EditorPanel() {
   };
 
   return (
-    <Tabs
+    <CustomTabs
       value={activeFilePath ?? ''}
       onValueChange={setActiveFile}
       className="flex flex-1 w-full h-full bg-(--surface) overflow-hidden"
@@ -190,6 +190,6 @@ export const EditorPanel = memo(function EditorPanel() {
           {openFiles.length === 0 && <div className={'flex w-full items-center justify-center'}>{NO_FILES_OPEN_PLACEHOLDER}</div>}
         </div>
       </TabsContent>
-    </Tabs>
+    </CustomTabs>
   );
 });

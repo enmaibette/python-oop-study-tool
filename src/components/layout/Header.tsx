@@ -14,7 +14,7 @@ export function Header() {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const challenges = useChallengeStore((state) => state.challenges);
-  const { triggerRun, triggerSubmit } = useRunCode();
+  const { triggerRun, triggerSubmit, triggerReset } = useRunCode();
 
   const isChallengePage = location.pathname.startsWith('/challenge/');
   const challengeLabel =
@@ -54,11 +54,14 @@ export function Header() {
       </Breadcrumb>
       {isChallengePage && (
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={triggerRun}>
+          <Button variant="secondary" size="sm" onClick={triggerRun}>
             Run
           </Button>
-          <Button variant="default" size="sm" onClick={triggerSubmit}>
+          <Button className={'hover:bg-primary/80'} size="sm" onClick={triggerSubmit}>
             Submit
+          </Button>
+          <Button variant="outline" size="sm" onClick={triggerReset}>
+            Reset
           </Button>
         </div>
       )}

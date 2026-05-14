@@ -40,17 +40,16 @@ export function useCodeMirror({ initialDoc, onChange }: UseCodeMirrorOptions) {
       view.destroy();
       viewRef.current = null;
     };
-    // Only initialize once - do not depend on initialDoc
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update document when initialDoc changes (challenge switch)
+  // Update document when initialDoc changes (challenge switch or reset)
   useEffect(() => {
     const view = viewRef.current;
     if (!view || initialDoc === lastDocRef.current) return;
 
+    lastDocRef.current = initialDoc;
     const currentDoc = view.state.doc.toString();
-    // Only update if content is different (challenge switch)
     if (currentDoc !== initialDoc) {
       view.dispatch({
         changes: {
@@ -59,7 +58,6 @@ export function useCodeMirror({ initialDoc, onChange }: UseCodeMirrorOptions) {
           insert: initialDoc,
         },
       });
-      lastDocRef.current = initialDoc;
     }
   }, [initialDoc]);
 
