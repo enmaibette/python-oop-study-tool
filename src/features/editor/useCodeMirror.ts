@@ -16,11 +16,9 @@ export function useCodeMirror({ initialDoc, onChange, onRun }: UseCodeMirrorOpti
   const onRunRef = useRef(onRun);
   const lastDocRef = useRef(initialDoc);
 
-  // Keep the callback refs current without re-running the main effect
-  useEffect(() => {
-    onChangeRef.current = onChange;
-    onRunRef.current = onRun;
-  });
+  // Safe to set during render — refs are only read in async CM callbacks, never during this render cycle
+  onChangeRef.current = onChange;
+  onRunRef.current = onRun;
 
   // Initialize editor once
   useEffect(() => {
@@ -46,25 +44,17 @@ export function useCodeMirror({ initialDoc, onChange, onRun }: UseCodeMirrorOpti
       view.destroy();
       viewRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally runs once; callbacks accessed via refs
   }, []);
 
-  // Update document when initialDoc changes (challenge switch or reset)
+  // Sync editor content when initialDoc changes (challenge switch or reset)
   useEffect(() => {
     const view = viewRef.current;
     if (!view || initialDoc === lastDocRef.current) return;
-
     lastDocRef.current = initialDoc;
-    const currentDoc = view.state.doc.toString();
-    if (currentDoc !== initialDoc) {
-      view.dispatch({
-        changes: {
-          from: 0,
-          to: view.state.doc.length,
-          insert: initialDoc,
-        },
-      });
-    }
+    view.dispatch({
+      changes: { from: 0, to: view.state.doc.length, insert: initialDoc },
+    });
   }, [initialDoc]);
 
   return { containerRef };

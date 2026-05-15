@@ -1,9 +1,10 @@
 import type { Challenge, Hint, TestCase } from '@/types';
+import { isImageFile } from '@/lib/utils';
 
 interface ChallengeFiles {
   descriptionMarkdown?: string;
   hintsMarkdown?: string;
-  exampleCodeFiles: Array<{ path: string; content: string }>;
+  templateCodeFiles: Array<{ path: string; content: string }>;
   assetFiles: Array<{ path: string; url: string }>;
   testCasePy?: string;
 }
@@ -20,13 +21,13 @@ const hintsModules = import.meta.glob('./*/hints.md', {
   query: '?raw',
 }) as Record<string, string>;
 
-const exampleCodeModules = import.meta.glob('./*/exampleCode/**', {
+const templateCodeModules = import.meta.glob('./*/templateCode/**', {
   eager: true,
   import: 'default',
   query: '?raw',
 }) as Record<string, string>;
 
-const assetUrlModules = import.meta.glob('./*/exampleCode/**', {
+const assetUrlModules = import.meta.glob('./*/templateCode/**', {
   eager: true,
   import: 'default',
   query: '?url',
@@ -56,7 +57,7 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
   const getOrCreate = (folder: string) => {
     const existing = files.get(folder);
     if (existing) return existing;
-    const created: ChallengeFiles = { exampleCodeFiles: [], assetFiles: [] };
+    const created: ChallengeFiles = { templateCodeFiles: [], assetFiles: [] };
     files.set(folder, created);
     return created;
   };
@@ -67,13 +68,13 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
   for (const [filePath, content] of Object.entries(hintsModules)) {
     getOrCreate(getFolderName(filePath)).hintsMarkdown = content;
   }
-  for (const [filePath, content] of Object.entries(exampleCodeModules)) {
-    if (filePath.endsWith('.py')) {
-      getOrCreate(getFolderName(filePath)).exampleCodeFiles.push({ path: filePath, content });
+  for (const [filePath, content] of Object.entries(templateCodeModules)) {
+    if (!isImageFile(filePath)) {
+      getOrCreate(getFolderName(filePath)).templateCodeFiles.push({ path: filePath, content });
     }
   }
   for (const [filePath, url] of Object.entries(assetUrlModules)) {
-    if (!filePath.endsWith('.py')) {
+    if (isImageFile(filePath)) {
       getOrCreate(getFolderName(filePath)).assetFiles.push({ path: filePath, url });
     }
   }
@@ -148,20 +149,20 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
   if (!files.descriptionMarkdown) throw new Error(`Missing description.md for ${folderName}.`);
   if (!files.hintsMarkdown) throw new Error(`Missing hints.md for ${folderName}.`);
   if (!files.testCasePy) throw new Error(`Missing testcase.py for ${folderName}.`);
-  if (files.exampleCodeFiles.length === 0) throw new Error(`Missing exampleCode/*.py for ${folderName}.`);
+  if (files.templateCodeFiles.length === 0) throw new Error(`Missing templateCode/*.py for ${folderName}.`);
 
   const parsed = parseDescriptionDocument(files.descriptionMarkdown);
   if (parsed.id !== prefix) {
     throw new Error(`description.md id (${parsed.id}) does not match folder prefix (${prefix}) in ${folderName}.`);
   }
 
-  const starterCode = files.exampleCodeFiles.map(f => ({
-    path: f.path.replace(/^\.\//, '').replace(/\/exampleCode\//, '/'),
+  const starterCode = files.templateCodeFiles.map(f => ({
+    path: f.path.replace(/^\.\//, '').replace(/\/templateCode\//, '/'),
     content: f.content.replace(/\r\n/g, '\n').replace(/\r/g, '\n'),
   }));
 
   const assets = files.assetFiles.map(f => ({
-    path: f.path.replace(/^\.\//, '').replace(/\/exampleCode\//, '/'),
+    path: f.path.replace(/^\.\//, '').replace(/\/templateCode\//, '/'),
     url: f.url,
   }));
 

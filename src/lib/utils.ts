@@ -1,9 +1,15 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { FileTreeItem, StarterCode } from '@/types';
+import { IMAGE_EXTENSIONS } from '@/lib/constants.ts';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function isImageFile(path: string): boolean {
+  const dot = path.lastIndexOf('.');
+  return dot !== -1 && IMAGE_EXTENSIONS.has(path.slice(dot).toLowerCase());
 }
 
 export function buildFileTree(starterCode: StarterCode[]): FileTreeItem[] {

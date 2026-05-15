@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { useWorkerStore } from '@/stores/workerStore.ts';
 import { useUIStore } from '@/stores/uiStore';
 
-
 type GfxMsg =
   | { type: 'gfx'; cmd: 'drawLine'; args: [number, number, number, number, string] }
   | { type: 'gfx'; cmd: 'drawImage'; args: [ArrayBuffer, number, number, number | undefined, number | undefined] }
@@ -18,10 +17,14 @@ export function CanvasTab({ clearKey }: { clearKey: string }) {
   const commandsRef = useRef<GfxRedraw[]>([]);
   const canvasClearKey = useUIStore((state) => state.canvasClearKey);
 
-  useEffect(() => {
+  const clearCanvas = () => {
     commandsRef.current = [];
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  };
+
+  useEffect(() => {
+    clearCanvas();
   }, [clearKey, canvasClearKey]);
 
   useEffect(() => {
@@ -45,7 +48,6 @@ export function CanvasTab({ clearKey }: { clearKey: string }) {
       },
     };
 
-    // redraw all commands to redraw the canvas after a resize
     const redraw = () => {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       commandsRef.current.forEach((msg) => {
@@ -57,8 +59,7 @@ export function CanvasTab({ clearKey }: { clearKey: string }) {
     const onMessage = async (e: MessageEvent<GfxMsg>) => {
       if (e.data.type !== 'gfx') return;
       if (e.data.cmd === 'clear') {
-        commandsRef.current = [];
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        clearCanvas();
         return;
       }
       if (e.data.cmd === 'drawImage') {

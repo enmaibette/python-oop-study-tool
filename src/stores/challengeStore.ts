@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Challenge, FileTreeItem } from '@/types';
 import { challenges as staticChallenges } from '@/data/challenges/index';
-import { buildFileTree } from '@/lib/utils';
+import { buildFileTree, isImageFile } from '@/lib/utils';
 import { loadFilesystem, saveFilesystem, loadBinaryFiles, saveBinaryFiles } from '@/lib/db';
 import { insertNodeInTree, removeNodeFromTree, renameNodeInTree } from '@/lib/treeUtils';
 
@@ -29,12 +29,6 @@ interface ChallengeState {
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 
-const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.bmp', '.ico']);
-
-const isImageFile = (path: string) => {
-  const dot = path.lastIndexOf('.');
-  return dot !== -1 && IMAGE_EXTENSIONS.has(path.slice(dot).toLowerCase());
-};
 
 const stripReadonlyNodes = (tree: FileTreeItem[]): FileTreeItem[] =>
   tree
@@ -193,7 +187,7 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
     if (!challenge) return;
     const map: Record<string, string> = {};
     for (const f of challenge.starterCode) map[f.path] = f.content;
-    const tree = buildFileTree(challenge.starterCode);
+    const tree = mergeAssetNodes(buildFileTree(challenge.starterCode), challenge.assets);
     const content = activeFilePath ? (map[activeFilePath] ?? '') : '';
     set({ editorContentMap: map, editorContent: content, fileTree: tree });
     if (activeChallengeId) saveFilesystem(activeChallengeId, { files: map, fileTree: stripReadonlyNodes(tree) }).catch(() => {});

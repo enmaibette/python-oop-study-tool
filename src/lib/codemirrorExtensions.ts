@@ -6,6 +6,12 @@ import { autocompletion } from "@codemirror/autocomplete";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorState, Extension } from "@codemirror/state";
 
+const editorTheme = EditorView.theme({
+  "&": { height: "100%" },
+  ".cm-scroller": { overflow: "auto" },
+  ".cm-content": { padding: "12px 0" },
+});
+
 export function buildExtensions(onChange: (value: string) => void, onRun?: () => void): Extension[] {
   return [
     lineNumbers(),
@@ -15,16 +21,10 @@ export function buildExtensions(onChange: (value: string) => void, onRun?: () =>
     oneDark,
     keymap.of([{ key: 'Ctrl-Enter', run: () => { onRun?.(); return true; } }, indentWithTab, ...defaultKeymap, ...historyKeymap]),
     EditorView.updateListener.of((update) => {
-      if (update.docChanged) {
-        onChange(update.state.doc.toString());
-      }
+      if (update.docChanged) onChange(update.state.doc.toString());
     }),
     EditorState.tabSize.of(4),
     indentUnit.of('    '),
-    EditorView.theme({
-      "&": { height: "100%" },
-      ".cm-scroller": { overflow: "auto" },
-      ".cm-content": { padding: "12px 0" },
-    }),
+    editorTheme,
   ];
 }

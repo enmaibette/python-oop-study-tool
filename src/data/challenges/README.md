@@ -5,7 +5,7 @@ Each challenge lives in its own folder.
 Required files per challenge:
 - `description.md`
 - `hints.md`
-- `exampleCode/*.py`
+- `templateCode/*.py`
 - `testcase.py`
 
 `description.md` format:

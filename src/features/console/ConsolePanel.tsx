@@ -57,15 +57,19 @@ export function ConsolePanel({
             <TabsContent value="output" className="flex-1 min-h-0 overflow-hidden">
               <OutputTab outputLines={outputLines} />
             </TabsContent>
-
             <TabsContent value="testcases" className="flex-1 min-h-0 overflow-hidden">
               <TestCasesTab testCases={testCases} />
             </TabsContent>
-            <TabsContent forceMount value={'canvas'} className="flex-1 min-h-0 overflow-hidden data-[state=inactive]:hidden">
-              <CanvasTab clearKey={challengeId} />
-            </TabsContent>
           </>
         )}
+        <TabsContent
+          forceMount
+          value="canvas"
+          className="flex-1 min-h-0 overflow-hidden data-[state=inactive]:hidden"
+          style={{ display: (!isOpen || !canvas) ? 'none' : undefined }}
+        >
+          <CanvasTab clearKey={challengeId} />
+        </TabsContent>
       </CustomTabs>
     </div>
   );

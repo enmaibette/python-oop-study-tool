@@ -13,18 +13,20 @@ export function useWorkerMessages() {
     if (!workerRef) return;
     const handler = (event: MessageEvent) => {
       const { type } = event.data;
-      if (type === 'result') {
-        appendOutputLines(event.data.stdout.split('\n'));
-      }
-      if (type === 'error') {
-        appendOutputLine(`Error: ${event.data.message}`);
-      }
-      if (type === 'submit_result') {
-        setTestCaseResults(event.data.results);
-      }
-      if (type === 'submit_error') {
-        appendOutputLine(`Submit error: ${event.data.message}`);
-        setConsoleActiveTab('output');
+      switch (type) {
+        case 'result':
+          appendOutputLines(event.data.stdout.split('\n'));
+          break;
+        case 'error':
+          appendOutputLine(`Error: ${event.data.message}`);
+          break;
+        case 'submit_result':
+          setTestCaseResults(event.data.results);
+          break;
+        case 'submit_error':
+          appendOutputLine(`Submit error: ${event.data.message}`);
+          setConsoleActiveTab('output');
+          break;
       }
     };
     workerRef.addEventListener('message', handler);
