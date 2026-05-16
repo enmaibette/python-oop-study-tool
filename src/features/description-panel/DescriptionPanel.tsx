@@ -1,14 +1,15 @@
 import { memo } from 'react';
-import { X, FileText, Lightbulb } from 'lucide-react';
+import { X, FileText, Lightbulb, Palette } from 'lucide-react';
 import { CustomTabs, TabsList, TabsTrigger, TabsContent } from '../../components/common/CustomTabs';
 import { DescriptionTab } from './DescriptionTab';
 import { HintTab } from './HintTab';
-import type { Challenge } from '@/types';
+import { CanvasTab } from './CanvasTab';
+import type { Challenge, DescriptionTab as DescriptionTabType } from '@/types';
 
 interface DescriptionPanelProps {
   challenge: Challenge;
-  activeTab: 'description' | 'hint';
-  onTabChange: (tab: 'description' | 'hint') => void;
+  activeTab: DescriptionTabType;
+  onTabChange: (tab: DescriptionTabType) => void;
   onOpenChange: (open: boolean) => void;
   isOpen: boolean;
 }
@@ -28,7 +29,7 @@ export const DescriptionPanel = memo(function DescriptionPanel({
         orientation={isOpen ? 'horizontal' : 'vertical'}
         onValueChange={(v) => {
           if (!isOpen) onOpenChange(true);
-          onTabChange(v as 'description' | 'hint');
+          onTabChange(v as DescriptionTabType);
         }}
         className="flex flex-col h-full"
       >
@@ -51,6 +52,11 @@ export const DescriptionPanel = memo(function DescriptionPanel({
             <TabsTrigger value="hint">
               {isOpen ? 'Hint' : <Lightbulb className="h-4 w-4" />}
             </TabsTrigger>
+            {challenge.canvas && (
+              <TabsTrigger value="canvas">
+                {isOpen ? 'Canvas' : <Palette className="h-4 w-4" />}
+              </TabsTrigger>
+            )}
           </TabsList>
           {isOpen && (
             <button
@@ -73,6 +79,11 @@ export const DescriptionPanel = memo(function DescriptionPanel({
             <TabsContent value="hint" className="flex-1 overflow-y-auto">
               <HintTab hints={challenge.hints} />
             </TabsContent>
+            {challenge.canvas && (
+              <TabsContent value="canvas" className="flex-1 overflow-y-auto">
+                <CanvasTab />
+              </TabsContent>
+            )}
           </>
         )}
       </CustomTabs>

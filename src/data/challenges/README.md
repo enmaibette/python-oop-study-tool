@@ -14,9 +14,11 @@ Required files per challenge:
 ---
 id: '1'
 title: 'Create a Class - Dog'
+canvas: false
 hasDiagram: false
 ---
 
+# Title
 ## Description
 ...
 

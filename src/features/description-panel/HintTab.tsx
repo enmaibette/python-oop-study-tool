@@ -5,6 +5,7 @@ import {
   AccordionContent,
 } from '@/components/ui/accordion';
 import type { Hint } from '@/types';
+import { MarkdownRenderer } from '@/features/description-panel/MarkdownRenderer.tsx';
 
 interface HintTabProps {
   hints: Hint[];
@@ -28,7 +29,9 @@ export function HintTab({ hints }: HintTabProps) {
               <span className="text-sm">Hint {index + 1}</span>
             </AccordionTrigger>
             <AccordionContent>
-              <p className="text-sm text-(--text) leading-relaxed">{hint.text}</p>
+              <MarkdownRenderer>
+                {hint.text}
+              </MarkdownRenderer>
             </AccordionContent>
           </AccordionItem>
         ))}

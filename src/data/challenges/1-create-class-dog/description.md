@@ -4,9 +4,9 @@ title: 'Create a Class - Dog'
 canvas: 'true'
 ---
 
-## Description
+# Create a Class - Dog
 
-### Advantages of OOP
+## Advantages of OOP
 
 Object-Oriented Programming organizes code around **objects** — bundles of data and behavior.
 Instead of managing separate variables for every entity, a class groups them together.
@@ -19,14 +19,15 @@ Key advantages:
 ---
 
 
-### Requirements
+## Requirements
 - Define a class `Car`
 - Add to the class `Car` two class attributes: `brand` and `speed`
 - Create two instances with different values
 
-
-
-### Example
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+## Example
 
 ```python
 dog = Dog("Rex")

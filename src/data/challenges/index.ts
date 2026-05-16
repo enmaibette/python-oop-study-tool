@@ -6,6 +6,7 @@ interface ChallengeFiles {
   hintsMarkdown?: string;
   templateCodeFiles: Array<{ path: string; content: string }>;
   assetFiles: Array<{ path: string; url: string }>;
+  descriptionImageFiles: Array<{ filename: string; url: string }>;
   testCasePy?: string;
 }
 
@@ -14,6 +15,14 @@ const descriptionModules = import.meta.glob('./*/description.md', {
   import: 'default',
   query: '?raw',
 }) as Record<string, string>;
+
+const canvasDescriptionModules = import.meta.glob('./canvasDescription.md', {
+  eager: true,
+  import: 'default',
+  query: '?raw',
+}) as Record<string, string>;
+
+export const canvasDescriptionMarkdown: string = Object.values(canvasDescriptionModules)[0] ?? '';
 
 const hintsModules = import.meta.glob('./*/hints.md', {
   eager: true,
@@ -28,6 +37,12 @@ const templateCodeModules = import.meta.glob('./*/templateCode/**', {
 }) as Record<string, string>;
 
 const assetUrlModules = import.meta.glob('./*/templateCode/**', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+}) as Record<string, string>;
+
+const descriptionImageUrlModules = import.meta.glob('./*/*.{png,jpg,jpeg,svg}', {
   eager: true,
   import: 'default',
   query: '?url',
@@ -57,7 +72,7 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
   const getOrCreate = (folder: string) => {
     const existing = files.get(folder);
     if (existing) return existing;
-    const created: ChallengeFiles = { templateCodeFiles: [], assetFiles: [] };
+    const created: ChallengeFiles = { templateCodeFiles: [], assetFiles: [], descriptionImageFiles: [] };
     files.set(folder, created);
     return created;
   };
@@ -77,6 +92,10 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
     if (isImageFile(filePath)) {
       getOrCreate(getFolderName(filePath)).assetFiles.push({ path: filePath, url });
     }
+  }
+  for (const [filePath, url] of Object.entries(descriptionImageUrlModules)) {
+    const filename = filePath.split('/').pop()!;
+    getOrCreate(getFolderName(filePath)).descriptionImageFiles.push({ filename, url });
   }
   for (const [filePath, content] of Object.entries(testcaseModules)) {
     getOrCreate(getFolderName(filePath)).testCasePy = content;
@@ -116,7 +135,7 @@ function parseDescriptionDocument(markdown: string): { id: string; title: string
   if (!id || !title) {
     throw new Error('Challenge description.md is missing required metadata (id, title, canvas).');
   }
-  return { id, title, canvas: Boolean(canvas),descriptionMarkdown: body.trim() };
+  return { id, title, canvas: Boolean(canvas), descriptionMarkdown: body.trim() };
 }
 
 function parseHints(markdown: string): Hint[] {
@@ -166,6 +185,11 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
     url: f.url,
   }));
 
+  const descriptionImages: Record<string, string> = {};
+  for (const { filename, url } of files.descriptionImageFiles) {
+    descriptionImages[filename] = url;
+  }
+
   return {
     id: prefix,
     title: parsed.title,
@@ -176,6 +200,7 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
     testCases: parseTestCasesFromPy(files.testCasePy),
     testCasesPy: files.testCasePy!,
     assets,
+    descriptionImages,
   };
 }
 

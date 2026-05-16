@@ -35,6 +35,7 @@ const mockChallenge: Challenge = {
   title: 'Create a Simple Bank Account Class',
   canvas: false,
   descriptionMarkdown,
+  descriptionImages: {filename: '', url: ''},
   starterCode: [{ path: 'solution.py', content: 'class BankAccount:\n    pass\n' }],
   hints: [],
   testCases: [],

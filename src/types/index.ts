@@ -1,5 +1,6 @@
 export type TestCaseStatus = 'pending' | 'pass' | 'fail';
 export type ConsoleTab = 'output' | 'testcases' | 'canvas';
+export type DescriptionTab = 'description' | 'hint' | 'canvas';
 
 export interface TestCase {
   id: string;
@@ -27,6 +28,7 @@ export interface Challenge {
   testCases: TestCase[];
   testCasesPy: string;
   assets: { path: string; url: string }[];
+  descriptionImages: Record<string, string>;
 }
 
 export type FileTreeItem = {

@@ -9,6 +9,7 @@ const mockChallenge: Challenge = {
   title: 'Create a Class – Dog',
   canvas: false,
   descriptionMarkdown: '## Description\n\nTest description',
+  descriptionImages: {filename: '', url: ''},
   starterCode: [],
   hints: [],
   testCases: [],
