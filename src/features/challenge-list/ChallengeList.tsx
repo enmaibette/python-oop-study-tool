@@ -11,7 +11,7 @@ export function ChallengeList() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-3">
+    <div className="w-full max-w-lg space-y-3">
       {challenges.map((challenge) => (
         <ChallengeRow
           key={challenge.id}
