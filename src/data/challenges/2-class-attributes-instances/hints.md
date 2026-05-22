@@ -1,0 +1,2 @@
+- Every instance can read the class attribute through `instance.attribute`.
+- `is` compares object identity; two freshly created instances are never the same object.

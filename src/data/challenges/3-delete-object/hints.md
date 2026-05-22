@@ -1,0 +1,4 @@
+- `del name` removes the binding; the object becomes eligible for cleanup when its refcount hits zero.
+- `__del__` runs automatically when the object is being destroyed.
+- Inside `__del__`, update the class attribute via `Item.deleted = True` (use the class, not `self`).
+- Print **after** the `del` line so the flag has already been flipped.

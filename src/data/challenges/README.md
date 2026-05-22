@@ -10,12 +10,10 @@ Required files per challenge:
 
 `description.md` format:
 
-```md
 ---
-id: '1'
-title: 'Create a Class - Dog'
-canvas: false
-hasDiagram: false
+id: '<numeric id>'
+title: '<Title of the challenge>'
+canvas: 'true' | 'false'  # true if the learner must use python_oop_canvas in this challenge
 ---
 
 # Title

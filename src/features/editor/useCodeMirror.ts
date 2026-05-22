@@ -16,7 +16,7 @@ export function useCodeMirror({ initialDoc, onChange, onRun }: UseCodeMirrorOpti
   const onRunRef = useRef(onRun);
   const lastDocRef = useRef(initialDoc);
 
-  // Safe to set during render — refs are only read in async CM callbacks, never during this render cycle
+  // Safe to set during render - refs are only read in async CM callbacks, never during this render cycle
   onChangeRef.current = onChange;
   onRunRef.current = onRun;
 
@@ -27,7 +27,10 @@ export function useCodeMirror({ initialDoc, onChange, onRun }: UseCodeMirrorOpti
     const state = EditorState.create({
       doc: initialDoc,
       extensions: buildExtensions(
-        (value) => onChangeRef.current(value),
+        (value) => {
+          lastDocRef.current = value;
+          onChangeRef.current(value);
+        },
         () => onRunRef.current?.(),
       ),
     });

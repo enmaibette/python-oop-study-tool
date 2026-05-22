@@ -48,7 +48,7 @@ export function SplitLayout({
       <ResizablePanel
         id="description-panel"
         panelRef={leftPanelRef}
-        defaultSize={400}
+        defaultSize={600}
         minSize={200}
         collapsible
         collapsedSize={30}
@@ -62,7 +62,7 @@ export function SplitLayout({
 
       <ResizablePanel id="workspace-panel" minSize={300}>
         <ResizablePanelGroup orientation="vertical" className="h-full">
-          <ResizablePanel>
+          <ResizablePanel minSize={30}>
             {editorPanel}
           </ResizablePanel>
 

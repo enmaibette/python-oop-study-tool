@@ -7,7 +7,7 @@ const pendingTestCase: TestCase = {
   id: 'tc1',
   title: 'Test Case 1: Basic deposit and withdrawal',
   expected: '1300',
-  got: '—',
+  got: '-',
   status: 'pending',
 };
 
@@ -50,7 +50,7 @@ describe('TestCaseCard', () => {
 
   it('renders the got value', () => {
     render(<TestCaseCard testCase={pendingTestCase} />);
-    expect(screen.getByText('—')).toBeInTheDocument();
+    expect(screen.getByText('-')).toBeInTheDocument();
   });
 
   it('renders a StatusIcon (SVG element)', () => {

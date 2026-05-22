@@ -21,7 +21,6 @@ export const DescriptionPanel = memo(function DescriptionPanel({
   onOpenChange,
   isOpen,
 }: DescriptionPanelProps) {
-  console.log("isOpen", isOpen)
   return (
     <div className="flex flex-col h-full bg-(--surface) border-r border-(--border)">
       <CustomTabs

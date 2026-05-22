@@ -13,7 +13,7 @@ beforeEach(() => {
   useUIStore.setState(initialState);
 });
 
-describe('uiStore — initial state', () => {
+describe('uiStore - initial state', () => {
   it('isLeftPanelOpen is true', () => {
     expect(useUIStore.getState().isLeftPanelOpen).toBe(true);
   });
@@ -35,7 +35,7 @@ describe('uiStore — initial state', () => {
   });
 });
 
-describe('uiStore — setLeftPanelOpen', () => {
+describe('uiStore - setLeftPanelOpen', () => {
   it('sets isLeftPanelOpen to false', () => {
     useUIStore.getState().setLeftPanelOpen(false);
     expect(useUIStore.getState().isLeftPanelOpen).toBe(false);
@@ -48,7 +48,7 @@ describe('uiStore — setLeftPanelOpen', () => {
   });
 });
 
-describe('uiStore — appendOutputLine', () => {
+describe('uiStore - appendOutputLine', () => {
   it('adds a line to outputLines', () => {
     useUIStore.getState().appendOutputLine('hello');
     expect(useUIStore.getState().outputLines).toEqual(['hello']);
@@ -62,7 +62,7 @@ describe('uiStore — appendOutputLine', () => {
   });
 });
 
-describe('uiStore — clearOutput', () => {
+describe('uiStore - clearOutput', () => {
   it('empties outputLines', () => {
     useUIStore.getState().appendOutputLine('line 1');
     useUIStore.getState().appendOutputLine('line 2');
@@ -76,7 +76,7 @@ describe('uiStore — clearOutput', () => {
   });
 });
 
-describe('uiStore — setConsoleActiveTab', () => {
+describe('uiStore - setConsoleActiveTab', () => {
   it('updates consoleActiveTab to "testcases"', () => {
     useUIStore.getState().setConsoleActiveTab('testcases');
     expect(useUIStore.getState().consoleActiveTab).toBe('testcases');
@@ -89,7 +89,7 @@ describe('uiStore — setConsoleActiveTab', () => {
   });
 });
 
-describe('uiStore — setConsolePanelOpen', () => {
+describe('uiStore - setConsolePanelOpen', () => {
   it('sets isConsolePanelOpen to false', () => {
     useUIStore.getState().setConsolePanelOpen(false);
     expect(useUIStore.getState().isConsolePanelOpen).toBe(false);
@@ -102,7 +102,7 @@ describe('uiStore — setConsolePanelOpen', () => {
   });
 });
 
-describe('uiStore — setDescriptionActiveTab', () => {
+describe('uiStore - setDescriptionActiveTab', () => {
   it('updates descriptionActiveTab to "hint"', () => {
     useUIStore.getState().setDescriptionActiveTab('hint');
     expect(useUIStore.getState().descriptionActiveTab).toBe('hint');

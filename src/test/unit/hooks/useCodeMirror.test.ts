@@ -41,7 +41,7 @@ beforeEach(() => {
   capturedOnChangeHolder.current = null;
 });
 
-describe('useCodeMirror — return shape', () => {
+describe('useCodeMirror - return shape', () => {
   it('returns an object with a containerRef property', () => {
     const { result } = renderHook(() =>
       useCodeMirror({ initialDoc: '', onChange: vi.fn() }),
@@ -64,7 +64,7 @@ describe('useCodeMirror — return shape', () => {
   });
 });
 
-describe('useCodeMirror — EditorView construction', () => {
+describe('useCodeMirror - EditorView construction', () => {
   it('does NOT construct an EditorView when containerRef.current is null', () => {
     renderHook(() => useCodeMirror({ initialDoc: '', onChange: vi.fn() }));
     expect(MockEditorView).not.toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe('useCodeMirror — EditorView construction', () => {
   });
 });
 
-describe('useCodeMirror — EditorView.destroy on unmount', () => {
+describe('useCodeMirror - EditorView.destroy on unmount', () => {
   it('calls EditorView.destroy when the component unmounts', () => {
     const { unmount } = render(
       React.createElement(EditorWrapper, { initialDoc: 'start', onChange: vi.fn() }),
@@ -104,7 +104,7 @@ describe('useCodeMirror — EditorView.destroy on unmount', () => {
   });
 });
 
-describe('useCodeMirror — onChange wiring', () => {
+describe('useCodeMirror - onChange wiring', () => {
   it('wires the onChange callback through buildExtensions', () => {
     const onChange = vi.fn();
     render(React.createElement(EditorWrapper, { initialDoc: 'init', onChange }));
@@ -126,7 +126,7 @@ describe('useCodeMirror — onChange wiring', () => {
     expect(onChange).toHaveBeenNthCalledWith(2, 'line 2');
   });
 
-  it('routes onChange calls through onChangeRef — updated callback is used without re-creating the editor', () => {
+  it('routes onChange calls through onChangeRef - updated callback is used without re-creating the editor', () => {
     const firstOnChange = vi.fn();
     const secondOnChange = vi.fn();
 

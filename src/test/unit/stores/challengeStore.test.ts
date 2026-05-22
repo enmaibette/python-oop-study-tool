@@ -21,7 +21,7 @@ beforeEach(() => {
   useChallengeStore.setState(initialState);
 });
 
-describe('challengeStore — initial state', () => {
+describe('challengeStore - initial state', () => {
   it('has 4 challenges', () => {
     const { challenges } = useChallengeStore.getState();
     expect(challenges).toHaveLength(4);
@@ -38,7 +38,7 @@ describe('challengeStore — initial state', () => {
   });
 });
 
-describe('challengeStore — setActiveChallenge', () => {
+describe('challengeStore - setActiveChallenge', () => {
   it('sets activeChallengeId to "1"', async () => {
     await useChallengeStore.getState().setActiveChallenge('1');
     expect(useChallengeStore.getState().activeChallengeId).toBe('1');
@@ -69,7 +69,7 @@ describe('challengeStore — setActiveChallenge', () => {
   });
 });
 
-describe('challengeStore — setEditorContent', () => {
+describe('challengeStore - setEditorContent', () => {
   it('updates editorContent to the provided value', () => {
     useChallengeStore.getState().setEditorContent('foo');
     expect(useChallengeStore.getState().editorContent).toBe('foo');
@@ -82,7 +82,7 @@ describe('challengeStore — setEditorContent', () => {
   });
 });
 
-describe('challengeStore — resetEditorToStarter', () => {
+describe('challengeStore - resetEditorToStarter', () => {
   it('restores editorContent to the active challenge starterCode', async () => {
     await useChallengeStore.getState().setActiveChallenge('1');
     const { challenges, activeFilePath } = useChallengeStore.getState();

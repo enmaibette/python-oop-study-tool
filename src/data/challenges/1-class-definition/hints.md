@@ -1,0 +1,4 @@
+- Class names use `CapitalizedWords`, never `snake_case` or lowercase.
+- An empty class body still needs at least one statement; `pass` is the placeholder.
+- Create an instance by calling the class like a function: `Animal()`.
+- `type(obj)` returns the class object itself, which prints as `<class '...'>`.

@@ -1,0 +1,6 @@
+- Each dunder method must `return` a value, never `print` directly.
+- `__str__` and `__repr__` must return a string.
+- `__eq__` compares `self.items` with `other.items`.
+- `__len__` returns the number of items in the basket.
+- `__add__` creates a new `Basket` which combine both item lists with `+`.
+- `__getitem__` uses the `index` to access `self.items`.

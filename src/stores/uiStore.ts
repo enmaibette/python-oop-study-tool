@@ -18,6 +18,8 @@ interface UIState {
   setTestCaseResults: (results: TestCase[]) => void;
   canvasClearKey: number;
   bumpCanvasClearKey: () => void;
+  isSubmitPopoverOpen: boolean;
+  setSubmitPopoverOpen: (open: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -28,9 +30,10 @@ export const useUIStore = create<UIState>((set) => ({
   isConsolePanelOpen: true,
   testCaseResults: [],
   canvasClearKey: 0,
+  isSubmitPopoverOpen: false,
 
   setLeftPanelOpen: (open: boolean) => {
-    set({ isLeftPanelOpen: open });
+  set({ isLeftPanelOpen: open });
   },
 
   setConsoleActiveTab: (tab: ConsoleTab) => {
@@ -63,4 +66,8 @@ export const useUIStore = create<UIState>((set) => ({
   bumpCanvasClearKey: () => {
     set((state) => ({ canvasClearKey: state.canvasClearKey + 1 }));
   },
+
+  setSubmitPopoverOpen: (open: boolean) => {
+    set({ isSubmitPopoverOpen: open });
+  }
 }));

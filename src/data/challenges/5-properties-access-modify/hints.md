@@ -1,0 +1,4 @@
+- Use `self.title = title` inside `__init__` to attach a value to the instance.
+- Read a property with `book.title`; set it with `book.title = ...`.
+- Each instance stores its attributes in its own `__dict__`.
+- The first print shows the original value, the last print shows the updated one.

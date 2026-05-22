@@ -9,7 +9,7 @@ test.describe('Resizable panes', () => {
     await expect(page.getByRole('button', { name: /run/i })).toBeVisible();
   });
 
-  test('AC-08 — horizontal resize handle between description and editor is present', async ({
+  test('AC-08 - horizontal resize handle between description and editor is present', async ({
     page,
   }) => {
     // react-resizable-panels renders a drag handle element
@@ -17,7 +17,7 @@ test.describe('Resizable panes', () => {
     await expect(resizeHandles.first()).toBeVisible();
   });
 
-  test('AC-08 — dragging horizontal resize handle changes panel width', async ({ page }) => {
+  test('AC-08 - dragging horizontal resize handle changes panel width', async ({ page }) => {
     const handles = page.locator('[data-panel-resize-handle-id]');
     const horizontalHandle = handles.first();
 
@@ -46,7 +46,7 @@ test.describe('Resizable panes', () => {
     expect(afterBox?.width).not.toBe(beforeBox?.width);
   });
 
-  test('AC-08 — editor remains visible after horizontal resize', async ({ page }) => {
+  test('AC-08 - editor remains visible after horizontal resize', async ({ page }) => {
     const handles = page.locator('[data-panel-resize-handle-id]');
     const horizontalHandle = handles.first();
 
@@ -68,7 +68,7 @@ test.describe('Resizable panes', () => {
     await expect(page.locator('.cm-editor').first()).toBeVisible();
   });
 
-  test('AC-08 — console panel remains visible after resize', async ({ page }) => {
+  test('AC-08 - console panel remains visible after resize', async ({ page }) => {
     const handles = page.locator('[data-panel-resize-handle-id]');
     // There should be at least 2 handles: horizontal (left/right) and vertical (top/bottom)
     await expect(handles).toHaveCount(2);

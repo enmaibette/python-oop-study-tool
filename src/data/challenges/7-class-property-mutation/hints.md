@@ -1,0 +1,4 @@
+- Set a class attribute on the class itself: `Counter.total = 10`.
+- Reading `a.total` falls back to the class attribute when no instance attribute exists.
+- Assigning `a.total = 99` creates a new instance attribute that shadows the class one.
+- The other instance still reads the class attribute.

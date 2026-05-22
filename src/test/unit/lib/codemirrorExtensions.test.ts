@@ -1,5 +1,5 @@
 /**
- * Unit tests for codemirrorExtensions.ts — buildExtensions().
+ * Unit tests for codemirrorExtensions.ts - buildExtensions().
  *
  * All CodeMirror packages are mocked so that no real DOM operations,
  * ResizeObserver, or canvas APIs are needed.  The mocks return lightweight
@@ -18,7 +18,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ---------------------------------------------------------------------------
-// Hoisted spy/stub declarations — available inside vi.mock() factories.
+// Hoisted spy/stub declarations - available inside vi.mock() factories.
 // ---------------------------------------------------------------------------
 
 const {
@@ -87,7 +87,7 @@ vi.mock('@codemirror/theme-one-dark', () => ({
 }));
 
 // ---------------------------------------------------------------------------
-// Import under test — after mocks are in place.
+// Import under test - after mocks are in place.
 // ---------------------------------------------------------------------------
 
 import { buildExtensions } from '@/lib/codemirrorExtensions';
@@ -96,7 +96,7 @@ import { buildExtensions } from '@/lib/codemirrorExtensions';
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('buildExtensions — return type', () => {
+describe('buildExtensions - return type', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     capturedUpdateHandler.current = null;
@@ -113,7 +113,7 @@ describe('buildExtensions — return type', () => {
   });
 });
 
-describe('buildExtensions — callback acceptance', () => {
+describe('buildExtensions - callback acceptance', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     capturedUpdateHandler.current = null;
@@ -136,7 +136,7 @@ describe('buildExtensions — callback acceptance', () => {
   });
 });
 
-describe('buildExtensions — extension count', () => {
+describe('buildExtensions - extension count', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     capturedUpdateHandler.current = null;
@@ -150,7 +150,7 @@ describe('buildExtensions — extension count', () => {
   });
 });
 
-describe('buildExtensions — onChange wiring via EditorView.updateListener', () => {
+describe('buildExtensions - onChange wiring via EditorView.updateListener', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     capturedUpdateHandler.current = null;

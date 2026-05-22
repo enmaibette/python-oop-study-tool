@@ -1,0 +1,4 @@
+- Add a new attribute by simple assignment: `u1.email = "..."`.
+- `del u2.name` removes only that attribute from `u2`, not from the class.
+- `hasattr(obj, "x")` returns `True` if `obj.x` would succeed without error.
+- Dynamic attributes belong to a single instance, not to all instances of the class.

@@ -5,8 +5,8 @@ import { ConsolePanel } from '@/features/console/ConsolePanel';
 import type { TestCase } from '@/types';
 
 const mockTestCases: TestCase[] = [
-  { id: 'tc1', title: 'Test Case 1', expected: '1300', got: '—', status: 'pending' },
-  { id: 'tc2', title: 'Test Case 2', expected: 'No withdrawal', got: '—', status: 'pending' },
+  { id: 'tc1', title: 'Test Case 1', expected: '1300', got: '-', status: 'pending' },
+  { id: 'tc2', title: 'Test Case 2', expected: 'No withdrawal', got: '-', status: 'pending' },
 ];
 
 const defaultProps = {

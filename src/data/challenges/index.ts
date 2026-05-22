@@ -132,20 +132,20 @@ function parseFrontmatter(markdown: string): { frontmatter: Record<string, strin
 function parseDescriptionDocument(markdown: string): { id: string; title: string; canvas: boolean; descriptionMarkdown: string } {
   const { frontmatter, body } = parseFrontmatter(markdown);
   const { id, title, canvas} = frontmatter;
-  if (!id || !title) {
+if (!id || !title) {
     throw new Error('Challenge description.md is missing required metadata (id, title, canvas).');
   }
-  return { id, title, canvas: Boolean(canvas), descriptionMarkdown: body.trim() };
+  return { id, title, canvas: canvas === 'true', descriptionMarkdown: body.trim() };
 }
 
 function parseHints(markdown: string): Hint[] {
   return markdown
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => /^[-*•–—]\s+/.test(line))
+    .filter((line) => /^[-*•–-]\s+/.test(line))
     .map((line, index) => ({
       id: `h${index + 1}`,
-      text: line.replace(/^[-*•–—]\s+/, '').trim(),
+      text: line.replace(/^[-*•–-]\s+/, '').trim(),
     }));
 }
 
@@ -158,7 +158,7 @@ function parseTestCasesFromPy(pyContent: string): TestCase[] {
     const title = lines[0].trim();
     const expectedLine = lines.find((l) => l.includes('Expected:'));
     const expected = expectedLine ? expectedLine.split('Expected:')[1].trim() : '';
-    results.push({ id: match[1], title, expected, got: '—', status: 'pending' });
+    results.push({ id: match[1], title, expected, got: '-', status: 'pending' });
   }
   return results;
 }

@@ -2,7 +2,6 @@ import { loadPyodide, PyodideInterface } from 'pyodide';
 import { version } from 'pyodide/package.json';
 import setupPy from '@/python/setup.py?raw';
 import runnerPy from '@/python/runner.py?raw';
-
 let pyodide: PyodideInterface | null = null;
 let isReady = false;
 
@@ -30,8 +29,6 @@ const initializePyodide = async () => {
   self.postMessage({ type: 'ready' });
 };
 
-
-
 const runCode = async (
   code: string,
   activeFilePath: string | null,
@@ -55,7 +52,13 @@ const runCode = async (
   }
   const stdout: string[] = [];
   pyodide!.setStdout({ batched: (line: string) => stdout.push(line) });
-  await pyodide!.runPythonAsync(sanitizedCode);
+  const freshGlobals = pyodide!.globals.get('dict')();
+  freshGlobals.set('__name__', '__main__');
+  try {
+    await pyodide!.runPythonAsync(sanitizedCode, { globals: freshGlobals });
+  } finally {
+    freshGlobals.destroy();
+  }
 
   self.postMessage({ type: 'result', stdout: stdout.join('\n') });
 };

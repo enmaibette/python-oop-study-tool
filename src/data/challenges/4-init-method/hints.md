@@ -1,0 +1,4 @@
+- `__init__` must be indented inside the class body so Python knows it belongs to the class.
+- The first parameter is the instance itself; by convention it is called `self`.
+- Provide a default with `def __init__(self, name, age=1):`.
+- Use `self.name = name` and `self.age = age` to attach values to this instance.

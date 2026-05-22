@@ -9,12 +9,12 @@ test.describe('Left panel collapse', () => {
     await expect(page.getByRole('button', { name: /close description panel/i })).toBeVisible();
   });
 
-  test('AC-09 — description panel is visible initially', async ({ page }) => {
+  test('AC-09 - description panel is visible initially', async ({ page }) => {
     // The description panel contains the Description/Hint tabs
     await expect(page.getByRole('tab', { name: /description/i })).toBeVisible();
   });
 
-  test('AC-09 — clicking X close button hides the description panel', async ({ page }) => {
+  test('AC-09 - clicking X close button hides the description panel', async ({ page }) => {
     const closeButton = page.getByRole('button', { name: /close description panel/i });
     await closeButton.click();
 
@@ -22,14 +22,14 @@ test.describe('Left panel collapse', () => {
     await expect(page.getByRole('tab', { name: /description/i })).not.toBeVisible();
   });
 
-  test('AC-09 — editor is still visible after closing description panel', async ({ page }) => {
+  test('AC-09 - editor is still visible after closing description panel', async ({ page }) => {
     const closeButton = page.getByRole('button', { name: /close description panel/i });
     await closeButton.click();
 
     await expect(page.locator('.cm-editor').first()).toBeVisible();
   });
 
-  test('AC-09 — console panel is still visible after closing description panel', async ({
+  test('AC-09 - console panel is still visible after closing description panel', async ({
     page,
   }) => {
     const closeButton = page.getByRole('button', { name: /close description panel/i });
@@ -38,7 +38,7 @@ test.describe('Left panel collapse', () => {
     await expect(page.getByRole('tab', { name: /output/i })).toBeVisible();
   });
 
-  test('AC-09 — editor expands to take more horizontal space after panel close', async ({
+  test('AC-09 - editor expands to take more horizontal space after panel close', async ({
     page,
   }) => {
     // Record the editor width before collapse
@@ -57,7 +57,7 @@ test.describe('Left panel collapse', () => {
     expect(afterBox?.width).toBeGreaterThan(beforeBox?.width ?? 0);
   });
 
-  test('AC-09 — horizontal resize handle disappears after panel close', async ({ page }) => {
+  test('AC-09 - horizontal resize handle disappears after panel close', async ({ page }) => {
     const closeButton = page.getByRole('button', { name: /close description panel/i });
     await closeButton.click();
 
@@ -68,7 +68,7 @@ test.describe('Left panel collapse', () => {
     await expect(handles).toHaveCount(1);
   });
 
-  test('AC-09 — close then reopen from sidebar keeps close behavior consistent', async ({ page }) => {
+  test('AC-09 - close then reopen from sidebar keeps close behavior consistent', async ({ page }) => {
     await page.getByRole('button', { name: /close description panel/i }).click();
     await expect(page.getByRole('tab', { name: /description/i })).not.toBeVisible();
 

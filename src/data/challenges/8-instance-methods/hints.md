@@ -1,0 +1,3 @@
+- Every method needs `self` as its first parameter.
+- Call instance methods on an instance, not on the class. For example, `book1.describe()` is correct, but `Book.describe(book1)` is not.
+- `describe` must use `print(...)` and not `return ...`.

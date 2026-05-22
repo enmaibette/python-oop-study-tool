@@ -8,6 +8,7 @@ export function useWorkerMessages() {
   const appendOutputLines = useUIStore((state) => state.appendOutputLines);
   const setConsoleActiveTab = useUIStore((state) => state.setConsoleActiveTab);
   const setTestCaseResults = useUIStore((state) => state.setTestCaseResults);
+  const setSubmitPopoverOpen = useUIStore((state) => state.setSubmitPopoverOpen);
 
   useEffect(() => {
     if (!workerRef) return;
@@ -22,6 +23,7 @@ export function useWorkerMessages() {
           break;
         case 'submit_result':
           setTestCaseResults(event.data.results);
+          setSubmitPopoverOpen(true);
           break;
         case 'submit_error':
           appendOutputLine(`Submit error: ${event.data.message}`);

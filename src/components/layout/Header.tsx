@@ -11,6 +11,17 @@ import { useChallengeStore } from '@/stores/challengeStore';
 import { useRunCode } from '@/hooks/useRunCode';
 import { useWorkerStore } from '@/stores/workerStore.ts';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
+import {
+  ALL_CHALLENGES_COMPLETED,
+  ALL_TESTS_PASSED,
+  NEXT_CHALLENGE,
+  PYODIDE_LOADING_TEXT,
+  RUN_TOOLTIP_TEXT,
+  SUBMIT_TOOLTIP_TEXT,
+  TESTS_FAILED,
+} from '@/lib/constants';
+import { useUIStore } from '@/stores/uiStore.ts';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog.tsx';
 
 export function Header() {
   const location = useLocation();
@@ -18,6 +29,16 @@ export function Header() {
   const challenges = useChallengeStore((state) => state.challenges);
   const { triggerRun, triggerSubmit, triggerReset } = useRunCode();
   const isReady = useWorkerStore((state) => state.isReady);
+
+  const isSubmitPopoverOpen = useUIStore((state) => state.isSubmitPopoverOpen);
+  const testCaseResults = useUIStore((state) => state.testCaseResults);
+  const setSubmitPopoverOpen = useUIStore((state) => state.setSubmitPopoverOpen);
+
+  const passed = testCaseResults.filter((t) => t.status === 'pass').length;
+  const total = testCaseResults.length;
+  const allPassed = total > 0 && passed === total;
+  const currentIndex = challenges.findIndex((c) => c.id === id);
+  const nextChallenge = challenges[currentIndex + 1] ?? null;
 
   const isChallengePage = location.pathname.startsWith('/challenge/');
   const challengeLabel =
@@ -65,7 +86,9 @@ export function Header() {
                 </Button>
               </div>
             </TooltipTrigger>
-            <TooltipContent>{isReady ? <p>Runs the code</p> : <p>Pyodide is loading...</p>}</TooltipContent>
+            <TooltipContent>
+              <p>{isReady ? RUN_TOOLTIP_TEXT : PYODIDE_LOADING_TEXT}</p>
+            </TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -80,8 +103,34 @@ export function Header() {
                 </Button>
               </div>
             </TooltipTrigger>
-              <TooltipContent>{isReady ? <p>Runs and tests the code against testcases</p> : <p>Pyodide is loading...</p>}</TooltipContent>
+            <TooltipContent>
+              {isReady ? <p>{SUBMIT_TOOLTIP_TEXT}</p> : <p>{PYODIDE_LOADING_TEXT}</p>}
+            </TooltipContent>
           </Tooltip>
+          <Dialog open={isSubmitPopoverOpen} onOpenChange={setSubmitPopoverOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{passed} / {total} tests passed</DialogTitle>
+                <DialogDescription>
+                  {allPassed ? ALL_TESTS_PASSED : TESTS_FAILED}
+                </DialogDescription>
+              </DialogHeader>
+              {allPassed && (
+                <DialogFooter>
+                  {nextChallenge ? (
+                    <Link
+                      to={`/challenge/${nextChallenge.id}`}
+                      onClick={() => setSubmitPopoverOpen(false)}
+                    >
+                      <Button className="w-full">{NEXT_CHALLENGE}: {nextChallenge.title}</Button>
+                    </Link>
+                  ) : (
+                    <DialogDescription>{ALL_CHALLENGES_COMPLETED}</DialogDescription>
+                  )}
+                </DialogFooter>
+              )}
+            </DialogContent>
+          </Dialog>
           <Button variant="outline" size="sm" onClick={triggerReset}>
             Reset
           </Button>

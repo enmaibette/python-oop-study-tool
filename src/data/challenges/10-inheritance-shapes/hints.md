@@ -1,0 +1,5 @@
+- Declare inheritance with `class Line(Shape):`.
+- Override `draw` by defining a method with the same name in the subclass.
+- To draw a cross, you need two lines: diagonal 1 - from top-left to bottom-right & diagonal 2 - from top-right to bottom-left.
+- top-left: self.x, self.y & bottom-right: self.x + self.size, self.y + self.size
+- top-right: self.x + self.size, self.y & bottom-left:  (self.x, self.y + self.size)

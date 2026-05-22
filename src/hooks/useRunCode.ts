@@ -28,7 +28,7 @@ export function useRunCode(): UseRunCodeReturn {
   };
 
   const triggerSubmit = () => {
-    // getState() avoids a stale closure — challenges list is not subscribed reactively here
+    // getState() avoids a stale closure - challenges list is not subscribed reactively here
     const { challenges, activeChallengeId } = useChallengeStore.getState();
     const currentActive = challenges.find((c) => c.id === activeChallengeId);
     if (!currentActive) return;
