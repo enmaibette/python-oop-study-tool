@@ -90,7 +90,7 @@ vi.mock('@codemirror/theme-one-dark', () => ({
 // Import under test - after mocks are in place.
 // ---------------------------------------------------------------------------
 
-import { buildExtensions } from '@/lib/codemirrorExtensions';
+import { buildExtensions } from '@/features/editor/codemirrorExtensions';
 
 // ---------------------------------------------------------------------------
 // Tests
