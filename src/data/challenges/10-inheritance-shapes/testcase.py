@@ -12,19 +12,15 @@ class _FakeCanvas:
     def draw_image(self, *args, **kwargs):
         self.calls.append(("image", args, kwargs))
 
-
+_REAL_CANVAS = builtins.canvas # Save the real canvas to restore later
 _FAKE = _FakeCanvas()
 builtins.canvas = _FAKE
 
 class TestInheritanceShapes(unittest.TestCase):
     def setUp(self):
-        self._real_canvas = builtins.canvas # save user canvas
         builtins.canvas = _FAKE
         _FAKE.calls.clear()
         importlib.reload(main)
-
-    def tearDown(self):
-        builtins.canvas = self._real_canvas  # restore user canvas
 
     def test_shape_is_class(self):
         """Shape must be defined as a class.
@@ -91,4 +87,7 @@ class TestInheritanceShapes(unittest.TestCase):
         self.assertEqual(line.x, 50)
         self.assertEqual(line.y, 50)
 
-run_tests(TestInheritanceShapes)
+try:
+    run_tests(TestInheritanceShapes)
+finally:
+    builtins.canvas = _REAL_CANVAS # restores the canvas. Also after an exception
