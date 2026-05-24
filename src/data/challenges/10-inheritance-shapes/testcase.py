@@ -18,9 +18,13 @@ builtins.canvas = _FAKE
 
 class TestInheritanceShapes(unittest.TestCase):
     def setUp(self):
+        self._real_canvas = builtins.canvas # save user canvas
         builtins.canvas = _FAKE
         _FAKE.calls.clear()
         importlib.reload(main)
+
+    def tearDown(self):
+        builtins.canvas = self._real_canvas  # restore user canvas
 
     def test_shape_is_class(self):
         """Shape must be defined as a class.
