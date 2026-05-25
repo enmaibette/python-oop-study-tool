@@ -40,7 +40,7 @@ export function ConsolePanel({
           <TabsList variant="line" className="px-2 flex-1">
             <TabsTrigger value="output">Output</TabsTrigger>
             <TabsTrigger value="testcases">Test Cases</TabsTrigger>
-            <TabsTrigger hidden={!canvas}  value="canvas">Canvas</TabsTrigger>
+            <TabsTrigger hidden={!canvas} value="canvas">Canvas</TabsTrigger>
           </TabsList>
           <button
             type="button"
