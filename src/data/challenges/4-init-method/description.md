@@ -4,7 +4,7 @@ title: 'The __init__ Method'
 canvas: 'False'
 ---
 
-# The __init__ Method
+# The \_\_init__ Method
 
 ## Description
 `__init__` is a **dunder** method that Python calls automatically every time you create a new instance. Its job is to set the **initial state** of the object by attaching values to it.

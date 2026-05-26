@@ -32,3 +32,11 @@ export async function saveBinaryFiles(challengeId: string, binaryFiles: Record<s
   const db = await getDB()
   await db.put(STORE, binaryFiles, `${challengeId}:binary`)
 }
+export async function deleteFilesystem(challengeId: string) {
+  const db = await getDB()
+  await db.delete(STORE, challengeId)
+}
+export async function deleteBinaryFiles(challengeId: string) {
+  const db = await getDB()
+  await db.delete(STORE, `${challengeId}:binary`)
+}

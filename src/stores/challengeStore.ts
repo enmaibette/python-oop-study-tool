@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { Challenge, FileTreeItem } from '@/types';
 import { challenges as staticChallenges } from '@/data/challenges/index';
 import { buildFileTree, isImageFile } from '@/lib/utils';
-import { loadFilesystem, saveFilesystem, loadBinaryFiles, saveBinaryFiles } from '@/lib/db';
+import { loadFilesystem, saveFilesystem, loadBinaryFiles, saveBinaryFiles, deleteFilesystem, deleteBinaryFiles } from '@/lib/db';
 import { insertNodeInTree, removeNodeFromTree, renameNodeInTree } from '@/lib/treeUtils';
 
 interface ChallengeState {
@@ -19,7 +19,7 @@ interface ChallengeState {
   closeFile: (path: string) => void;
   openFile: (path: string) => void;
   setEditorContent: (code: string) => void;
-  resetEditorToStarter: () => void;
+  resetEditorToStarter: () => Promise<void>;
   setFileTree: (tree: FileTreeItem[]) => void;
   createFile: (parentPath: string, fileName: string, content?: string) => void;
   createFolder: (parentPath: string, name: string) => void;
@@ -181,16 +181,38 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
     }
   },
 
-  resetEditorToStarter: () => {
-    const { challenges, activeChallengeId, activeFilePath } = get();
+  resetEditorToStarter: async () => {
+    const { challenges, activeChallengeId } = get();
     const challenge = challenges.find((c) => c.id === activeChallengeId);
     if (!challenge) return;
     const map: Record<string, string> = {};
     for (const f of challenge.starterCode) map[f.path] = f.content;
     const tree = mergeAssetNodes(buildFileTree(challenge.starterCode), challenge.assets);
-    const content = activeFilePath ? (map[activeFilePath] ?? '') : '';
-    set({ editorContentMap: map, editorContent: content, fileTree: tree });
-    if (activeChallengeId) saveFilesystem(activeChallengeId, { files: map, fileTree: stripReadonlyNodes(tree) }).catch(() => {});
+    const first = challenge.starterCode[0];
+    if (activeChallengeId) {
+      deleteFilesystem(activeChallengeId).catch(() => {});
+      deleteBinaryFiles(activeChallengeId).catch(() => {});
+    }
+    const entries = await Promise.all(
+      challenge.assets.map(async ({ path, url }) => {
+        try {
+          const res = await fetch(url);
+          return [path, await res.arrayBuffer()] as const;
+        } catch {
+          return null;
+        }
+      })
+    );
+    const binaryFiles = Object.fromEntries(entries.filter((e) => e !== null));
+    if (activeChallengeId) saveBinaryFiles(activeChallengeId, binaryFiles).catch(() => {});
+    set({
+      editorContentMap: map,
+      editorContent: first ? (map[first.path] ?? '') : '',
+      activeFilePath: first?.path ?? null,
+      openFilePaths: challenge.starterCode.map((f) => f.path),
+      fileTree: tree,
+      binaryFiles,
+    });
   },
 
   setFileTree: (tree: FileTreeItem[]) => set({ fileTree: tree }),
