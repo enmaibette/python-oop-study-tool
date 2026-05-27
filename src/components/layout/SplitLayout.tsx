@@ -11,7 +11,7 @@ interface SplitLayoutProps {
   onLeftPanelOpenChange: (open: boolean) => void;
   isConsolePanelOpen: boolean;
   onConsolePanelOpenChange: (open: boolean) => void;
-  descriptionPanel: React.ReactNode;
+  exercisePanel: React.ReactNode;
   editorPanel: React.ReactNode;
   consolePanel: React.ReactNode;
 }
@@ -21,7 +21,7 @@ export function SplitLayout({
   onLeftPanelOpenChange,
   isConsolePanelOpen,
   onConsolePanelOpenChange,
-  descriptionPanel,
+  exercisePanel,
   editorPanel,
   consolePanel,
 }: SplitLayoutProps) {
@@ -46,7 +46,7 @@ export function SplitLayout({
   return (
     <ResizablePanelGroup orientation={'horizontal'} className="h-full w-full">
       <ResizablePanel
-        id="description-panel"
+        id="exercise-panel"
         panelRef={leftPanelRef}
         defaultSize={600}
         minSize={200}
@@ -56,7 +56,7 @@ export function SplitLayout({
           onLeftPanelOpenChange(size.inPixels > 32);
         }}
       >
-        {descriptionPanel}
+        {exercisePanel}
       </ResizablePanel>
       <ResizableHandle withHandle />
 

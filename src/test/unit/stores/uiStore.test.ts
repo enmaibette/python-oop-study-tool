@@ -5,7 +5,6 @@ const initialState = {
   isLeftPanelOpen: true,
   isConsolePanelOpen: true,
   consoleActiveTab: 'output' as const,
-  descriptionActiveTab: 'description' as const,
   outputLines: [] as string[],
 };
 
@@ -28,10 +27,6 @@ describe('uiStore - initial state', () => {
 
   it('outputLines is an empty array', () => {
     expect(useUIStore.getState().outputLines).toEqual([]);
-  });
-
-  it('descriptionActiveTab is "description"', () => {
-    expect(useUIStore.getState().descriptionActiveTab).toBe('description');
   });
 });
 
@@ -102,15 +97,3 @@ describe('uiStore - setConsolePanelOpen', () => {
   });
 });
 
-describe('uiStore - setDescriptionActiveTab', () => {
-  it('updates descriptionActiveTab to "hint"', () => {
-    useUIStore.getState().setDescriptionActiveTab('hint');
-    expect(useUIStore.getState().descriptionActiveTab).toBe('hint');
-  });
-
-  it('switches descriptionActiveTab back to "description"', () => {
-    useUIStore.getState().setDescriptionActiveTab('hint');
-    useUIStore.getState().setDescriptionActiveTab('description');
-    expect(useUIStore.getState().descriptionActiveTab).toBe('description');
-  });
-});

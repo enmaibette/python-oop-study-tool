@@ -2,15 +2,15 @@ import type { Challenge, Hint, TestCase } from '@/types';
 import { isImageFile } from '@/lib/utils';
 
 interface ChallengeFiles {
-  descriptionMarkdown?: string;
+  exerciseMarkdown?: string;
   hintsMarkdown?: string;
   templateCodeFiles: Array<{ path: string; content: string }>;
   assetFiles: Array<{ path: string; url: string }>;
-  descriptionImageFiles: Array<{ filename: string; url: string }>;
+  exerciseImageFiles: Array<{ filename: string; url: string }>;
   testCasePy?: string;
 }
 
-const descriptionModules = import.meta.glob('./*/description.md', {
+const exerciseModules = import.meta.glob('./*/exercise.md', {
   eager: true,
   import: 'default',
   query: '?raw',
@@ -42,7 +42,7 @@ const assetUrlModules = import.meta.glob('./*/templateCode/**', {
   query: '?url',
 }) as Record<string, string>;
 
-const descriptionImageUrlModules = import.meta.glob('./*/*.{png,jpg,jpeg,svg}', {
+const exerciseImageUrlModules = import.meta.glob('./*/*.{png,jpg,jpeg,svg}', {
   eager: true,
   import: 'default',
   query: '?url',
@@ -72,13 +72,13 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
   const getOrCreate = (folder: string) => {
     const existing = files.get(folder);
     if (existing) return existing;
-    const created: ChallengeFiles = { templateCodeFiles: [], assetFiles: [], descriptionImageFiles: [] };
+    const created: ChallengeFiles = { templateCodeFiles: [], assetFiles: [], exerciseImageFiles: [] };
     files.set(folder, created);
     return created;
   };
 
-  for (const [filePath, content] of Object.entries(descriptionModules)) {
-    getOrCreate(getFolderName(filePath)).descriptionMarkdown = content;
+  for (const [filePath, content] of Object.entries(exerciseModules)) {
+    getOrCreate(getFolderName(filePath)).exerciseMarkdown = content;
   }
   for (const [filePath, content] of Object.entries(hintsModules)) {
     getOrCreate(getFolderName(filePath)).hintsMarkdown = content;
@@ -93,9 +93,9 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
       getOrCreate(getFolderName(filePath)).assetFiles.push({ path: filePath, url });
     }
   }
-  for (const [filePath, url] of Object.entries(descriptionImageUrlModules)) {
+  for (const [filePath, url] of Object.entries(exerciseImageUrlModules)) {
     const filename = filePath.split('/').pop()!;
-    getOrCreate(getFolderName(filePath)).descriptionImageFiles.push({ filename, url });
+    getOrCreate(getFolderName(filePath)).exerciseImageFiles.push({ filename, url });
   }
   for (const [filePath, content] of Object.entries(testcaseModules)) {
     getOrCreate(getFolderName(filePath)).testCasePy = content;
@@ -107,14 +107,14 @@ function createChallengeFiles(): Map<string, ChallengeFiles> {
 function parseFrontmatter(markdown: string): { frontmatter: Record<string, string>; body: string } {
   const lines = markdown.split(/\r?\n/);
   if (lines[0]?.trim() !== '---') {
-    throw new Error('Challenge description.md must start with frontmatter (---).');
+    throw new Error('Challenge exercise.md must start with frontmatter (---).');
   }
 
   let endIndex = -1;
   for (let i = 1; i < lines.length; i += 1) {
     if (lines[i].trim() === '---') { endIndex = i; break; }
   }
-  if (endIndex === -1) throw new Error('Challenge description.md frontmatter is missing closing ---.');
+  if (endIndex === -1) throw new Error('Challenge exercise.md frontmatter is missing closing ---.');
 
   const frontmatter: Record<string, string> = {};
   for (const entry of lines.slice(1, endIndex)) {
@@ -129,13 +129,13 @@ function parseFrontmatter(markdown: string): { frontmatter: Record<string, strin
 }
 
 
-function parseDescriptionDocument(markdown: string): { id: string; title: string; canvas: boolean; descriptionMarkdown: string } {
+function parseExerciseDocument(markdown: string): { id: string; title: string; canvas: boolean; exerciseMarkdown: string } {
   const { frontmatter, body } = parseFrontmatter(markdown);
   const { id, title, canvas} = frontmatter;
 if (!id || !title) {
-    throw new Error('Challenge description.md is missing required metadata (id, title, canvas).');
+    throw new Error('Challenge exercise.md is missing required metadata (id, title, canvas).');
   }
-  return { id, title, canvas: canvas === 'true', descriptionMarkdown: body.trim() };
+  return { id, title, canvas: canvas === 'true', exerciseMarkdown: body.trim() };
 }
 
 function parseHints(markdown: string): Hint[] {
@@ -165,14 +165,14 @@ function parseTestCasesFromPy(pyContent: string): TestCase[] {
 
 function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): Challenge {
   const prefix = getPrefix(folderName);
-  if (!files.descriptionMarkdown) throw new Error(`Missing description.md for ${folderName}.`);
+  if (!files.exerciseMarkdown) throw new Error(`Missing exercise.md for ${folderName}.`);
   if (!files.hintsMarkdown) throw new Error(`Missing hints.md for ${folderName}.`);
   if (!files.testCasePy) throw new Error(`Missing testcase.py for ${folderName}.`);
   if (files.templateCodeFiles.length === 0) throw new Error(`Missing templateCode/*.py for ${folderName}.`);
 
-  const parsed = parseDescriptionDocument(files.descriptionMarkdown);
+  const parsed = parseExerciseDocument(files.exerciseMarkdown);
   if (parsed.id !== prefix) {
-    throw new Error(`description.md id (${parsed.id}) does not match folder prefix (${prefix}) in ${folderName}.`);
+    throw new Error(`exercise.md id (${parsed.id}) does not match folder prefix (${prefix}) in ${folderName}.`);
   }
 
   const starterCode = files.templateCodeFiles.map(f => ({
@@ -185,22 +185,22 @@ function validateAndBuildChallenge(folderName: string, files: ChallengeFiles): C
     url: f.url,
   }));
 
-  const descriptionImages: Record<string, string> = {};
-  for (const { filename, url } of files.descriptionImageFiles) {
-    descriptionImages[filename] = url;
+  const exerciseImages: Record<string, string> = {};
+  for (const { filename, url } of files.exerciseImageFiles) {
+    exerciseImages[filename] = url;
   }
 
   return {
     id: prefix,
     title: parsed.title,
     canvas: parsed.canvas,
-    descriptionMarkdown: parsed.descriptionMarkdown,
+    exerciseMarkdown: parsed.exerciseMarkdown,
     starterCode,
     hints: parseHints(files.hintsMarkdown),
     testCases: parseTestCasesFromPy(files.testCasePy),
     testCasesPy: files.testCasePy!,
     assets,
-    descriptionImages,
+    exerciseImages,
   };
 }
 

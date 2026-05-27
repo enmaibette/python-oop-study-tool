@@ -3,12 +3,12 @@
 Each challenge lives in its own folder.
 
 Required files per challenge:
-- `description.md`
+- `exercise.md`
 - `hints.md`
 - `templateCode/*.py`
 - `testcase.py`
 
-`description.md` format:
+`exercise.md` format:
 
 ---
 id: '<numeric id>'

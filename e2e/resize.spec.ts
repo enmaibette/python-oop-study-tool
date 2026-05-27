@@ -9,7 +9,7 @@ test.describe('Resizable panes', () => {
     await expect(page.getByRole('button', { name: /run/i })).toBeVisible();
   });
 
-  test('AC-08 - horizontal resize handle between description and editor is present', async ({
+  test('AC-08 - horizontal resize handle between exercise and editor is present', async ({
     page,
   }) => {
     // react-resizable-panels renders a drag handle element
@@ -23,7 +23,7 @@ test.describe('Resizable panes', () => {
 
     await horizontalHandle.waitFor({ state: 'visible' });
 
-    // Record initial bounding box of the description panel
+    // Record initial bounding box of the exercise panel
     const descPanel = page.locator('[data-panel]').first();
     const beforeBox = await descPanel.boundingBox();
 

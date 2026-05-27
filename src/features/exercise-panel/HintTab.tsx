@@ -5,7 +5,7 @@ import {
   AccordionContent,
 } from '@/components/ui/accordion';
 import type { Hint } from '@/types';
-import { MarkdownRenderer } from '@/features/description-panel/MarkdownRenderer.tsx';
+import { MarkdownRenderer } from '@/features/exercise-panel/MarkdownRenderer.tsx';
 
 interface HintTabProps {
   hints: Hint[];

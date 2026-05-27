@@ -2,19 +2,19 @@ import { useMemo } from 'react';
 import type { Challenge } from '@/types';
 import { MarkdownRenderer } from './MarkdownRenderer';
 
-interface DescriptionTabProps {
+interface ExerciseTabProps {
   challenge: Challenge;
 }
 
-export function DescriptionTab({ challenge }: DescriptionTabProps) {
+export function ExerciseTab({ challenge }: ExerciseTabProps) {
   const markdown = useMemo(
     () =>
-      challenge.descriptionMarkdown.replace(/!\[([^\]]*)]\(([^)]+)\)/g, (match, alt, src) => {
+      challenge.exerciseMarkdown.replace(/!\[([^\]]*)]\(([^)]+)\)/g, (match, alt, src) => {
         const filename = src.split('/').pop() ?? src;
-        const url = challenge.descriptionImages[filename];
+        const url = challenge.exerciseImages[filename];
         return url ? `![${alt}](${url})` : match;
       }),
-    [challenge.descriptionMarkdown, challenge.descriptionImages],
+    [challenge.exerciseMarkdown, challenge.exerciseImages],
   );
 
   return (

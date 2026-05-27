@@ -40,7 +40,6 @@ beforeEach(() => {
     isLeftPanelOpen: true,
     isConsolePanelOpen: true,
     consoleActiveTab: 'output',
-    descriptionActiveTab: 'description',
     outputLines: [],
   });
 });

@@ -6,33 +6,33 @@ test.describe('Left panel collapse', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/challenge/1');
     // Wait for the page to fully render
-    await expect(page.getByRole('button', { name: /close description panel/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /close exercise panel/i })).toBeVisible();
   });
 
-  test('AC-09 - description panel is visible initially', async ({ page }) => {
-    // The description panel contains the Description/Hint tabs
-    await expect(page.getByRole('tab', { name: /description/i })).toBeVisible();
+  test('AC-09 - exercise panel is visible initially', async ({ page }) => {
+    // The exercise panel contains the Exercise/Hint tabs
+    await expect(page.getByRole('tab', { name: /exercise/i })).toBeVisible();
   });
 
-  test('AC-09 - clicking X close button hides the description panel', async ({ page }) => {
-    const closeButton = page.getByRole('button', { name: /close description panel/i });
+  test('AC-09 - clicking X close button hides the exercise panel', async ({ page }) => {
+    const closeButton = page.getByRole('button', { name: /close exercise panel/i });
     await closeButton.click();
 
-    // The Description tab trigger should no longer be visible
-    await expect(page.getByRole('tab', { name: /description/i })).not.toBeVisible();
+    // The Exercise tab trigger should no longer be visible
+    await expect(page.getByRole('tab', { name: /exercise/i })).not.toBeVisible();
   });
 
-  test('AC-09 - editor is still visible after closing description panel', async ({ page }) => {
-    const closeButton = page.getByRole('button', { name: /close description panel/i });
+  test('AC-09 - editor is still visible after closing exercise panel', async ({ page }) => {
+    const closeButton = page.getByRole('button', { name: /close exercise panel/i });
     await closeButton.click();
 
     await expect(page.locator('.cm-editor').first()).toBeVisible();
   });
 
-  test('AC-09 - console panel is still visible after closing description panel', async ({
+  test('AC-09 - console panel is still visible after closing exercise panel', async ({
     page,
   }) => {
-    const closeButton = page.getByRole('button', { name: /close description panel/i });
+    const closeButton = page.getByRole('button', { name: /close exercise panel/i });
     await closeButton.click();
 
     await expect(page.getByRole('tab', { name: /output/i })).toBeVisible();
@@ -45,7 +45,7 @@ test.describe('Left panel collapse', () => {
     const editorContainer = page.locator('.cm-editor').first();
     const beforeBox = await editorContainer.boundingBox();
 
-    const closeButton = page.getByRole('button', { name: /close description panel/i });
+    const closeButton = page.getByRole('button', { name: /close exercise panel/i });
     await closeButton.click();
 
     // Give the layout time to re-render
@@ -58,7 +58,7 @@ test.describe('Left panel collapse', () => {
   });
 
   test('AC-09 - horizontal resize handle disappears after panel close', async ({ page }) => {
-    const closeButton = page.getByRole('button', { name: /close description panel/i });
+    const closeButton = page.getByRole('button', { name: /close exercise panel/i });
     await closeButton.click();
 
     await page.waitForTimeout(200);
@@ -69,13 +69,13 @@ test.describe('Left panel collapse', () => {
   });
 
   test('AC-09 - close then reopen from sidebar keeps close behavior consistent', async ({ page }) => {
-    await page.getByRole('button', { name: /close description panel/i }).click();
-    await expect(page.getByRole('tab', { name: /description/i })).not.toBeVisible();
+    await page.getByRole('button', { name: /close exercise panel/i }).click();
+    await expect(page.getByRole('tab', { name: /exercise/i })).not.toBeVisible();
 
     await page.getByRole('button', { name: /hints/i }).click();
-    await expect(page.getByRole('tab', { name: /description/i })).toBeVisible();
+    await expect(page.getByRole('tab', { name: /exercise/i })).toBeVisible();
 
-    await page.getByRole('button', { name: /close description panel/i }).click();
-    await expect(page.getByRole('tab', { name: /description/i })).not.toBeVisible();
+    await page.getByRole('button', { name: /close exercise panel/i }).click();
+    await expect(page.getByRole('tab', { name: /exercise/i })).not.toBeVisible();
   });
 });

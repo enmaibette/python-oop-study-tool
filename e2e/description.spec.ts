@@ -1,20 +1,20 @@
 import { test, expect } from '@playwright/test';
 
-// AC-04: Description Panel Content
+// AC-04: Exercise Panel Content
 // AC-05: Hint Accordion Works
 
-test.describe('Description panel', () => {
+test.describe('Exercise panel', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/challenge/1');
   });
 
-  test('AC-04 - Description tab is active by default', async ({ page }) => {
-    // The Description tab trigger should have data-state=active
-    const descTrigger = page.getByRole('tab', { name: /description/i });
+  test('AC-04 - Exercise tab is active by default', async ({ page }) => {
+    // The Exercise tab trigger should have data-state=active
+    const descTrigger = page.getByRole('tab', { name: /exercise/i });
     await expect(descTrigger).toHaveAttribute('data-state', 'active');
   });
 
-  test('AC-04 - challenge title is visible in description panel', async ({ page }) => {
+  test('AC-04 - challenge title is visible in exercise panel', async ({ page }) => {
     // Challenge 1 title
     await expect(page.getByText('Create a Class – Dog').first()).toBeVisible();
   });
@@ -63,9 +63,9 @@ test.describe('Description panel', () => {
     await expect(hint1Trigger).toHaveAttribute('data-state', 'closed');
   });
 
-  test('AC-04 - close button (X) is visible in the description panel', async ({ page }) => {
+  test('AC-04 - close button (X) is visible in the exercise panel', async ({ page }) => {
     await expect(
-      page.getByRole('button', { name: /close description panel/i })
+      page.getByRole('button', { name: /close exercise panel/i })
     ).toBeVisible();
   });
 });

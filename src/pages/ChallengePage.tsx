@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { SplitLayout } from '@/components/layout/SplitLayout';
-import { DescriptionPanel } from '@/features/description-panel/DescriptionPanel';
+import { ExercisePanel } from '@/features/exercise-panel/ExercisePanel';
 import { ConsolePanel } from '@/features/console/ConsolePanel';
 import { useChallenge } from '@/hooks/useChallenge';
 import { useChallengeStore } from '@/stores/challengeStore';
@@ -18,8 +18,6 @@ export default function ChallengePage() {
   const setLeftPanelOpen = useUIStore((state) => state.setLeftPanelOpen);
   const consoleActiveTab = useUIStore((state) => state.consoleActiveTab);
   const setConsoleActiveTab = useUIStore((state) => state.setConsoleActiveTab);
-  const descriptionActiveTab = useUIStore((state) => state.descriptionActiveTab);
-  const setDescriptionActiveTab = useUIStore((state) => state.setDescriptionActiveTab);
   const outputLines = useUIStore((state) => state.outputLines);
   const setConsolePanelOpen = useUIStore((state) => state.setConsolePanelOpen);
   const isConsolePanelOpen = useUIStore((state) => state.isConsolePanelOpen);
@@ -51,11 +49,9 @@ export default function ChallengePage() {
         onLeftPanelOpenChange={setLeftPanelOpen}
         isConsolePanelOpen={isConsolePanelOpen}
         onConsolePanelOpenChange={setConsolePanelOpen}
-        descriptionPanel={
-          <DescriptionPanel
+        exercisePanel={
+          <ExercisePanel
             challenge={challenge}
-            activeTab={descriptionActiveTab}
-            onTabChange={setDescriptionActiveTab}
             onOpenChange={setLeftPanelOpen}
             isOpen={isLeftPanelOpen}
           />

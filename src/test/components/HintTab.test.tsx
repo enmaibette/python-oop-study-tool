@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { HintTab } from '@/features/description-panel/HintTab';
+import { HintTab } from '@/features/exercise-panel/HintTab';
 import type { Hint } from '@/types';
 
 const twoHints: Hint[] = [

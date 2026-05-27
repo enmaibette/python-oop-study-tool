@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { highlight } from '@/features/description-panel/shiki';
+import { highlight } from '@/features/exercise-panel/shiki';
 
 interface ShikiCodeBlockProps {
   code: string;

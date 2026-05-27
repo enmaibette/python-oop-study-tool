@@ -1,14 +1,12 @@
 import { create } from 'zustand';
-import type { ConsoleTab, DescriptionTab, TestCase } from '@/types';
+import type { ConsoleTab, TestCase } from '@/types';
 
 interface UIState {
   isLeftPanelOpen: boolean;
   consoleActiveTab: ConsoleTab;
-  descriptionActiveTab: DescriptionTab;
   outputLines: string[];
   setLeftPanelOpen: (open: boolean) => void;
   setConsoleActiveTab: (tab: ConsoleTab) => void;
-  setDescriptionActiveTab: (tab: DescriptionTab) => void;
   appendOutputLine: (line: string) => void;
   appendOutputLines: (lines: string[]) => void;
   clearOutput: () => void;
@@ -25,7 +23,6 @@ interface UIState {
 export const useUIStore = create<UIState>((set) => ({
   isLeftPanelOpen: true,
   consoleActiveTab: 'output',
-  descriptionActiveTab: 'description',
   outputLines: [],
   isConsolePanelOpen: true,
   testCaseResults: [],
@@ -38,10 +35,6 @@ export const useUIStore = create<UIState>((set) => ({
 
   setConsoleActiveTab: (tab: ConsoleTab) => {
     set({ consoleActiveTab: tab });
-  },
-
-  setDescriptionActiveTab: (tab: DescriptionTab) => {
-    set({ descriptionActiveTab: tab });
   },
 
   appendOutputLine: (line: string) => {
