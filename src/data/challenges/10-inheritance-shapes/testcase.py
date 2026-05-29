@@ -2,25 +2,21 @@ import importlib
 import unittest
 import builtins
 from runner import run_tests
+from unittest.mock import MagicMock
 import main
 
-class _FakeCanvas:
-    def __init__(self):
-        self.calls = []
-    def draw_line(self, x1, y1, x2, y2, color="black"):
-        self.calls.append((x1, y1, x2, y2, color))
-    def draw_image(self, *args, **kwargs):
-        self.calls.append(("image", args, kwargs))
 
-_REAL_CANVAS = builtins.canvas # Save the real canvas to restore later
-_FAKE = _FakeCanvas()
-builtins.canvas = _FAKE
+_REAL_CANVAS = builtins.canvas # save the real canvas to restore later
 
 class TestInheritanceShapes(unittest.TestCase):
     def setUp(self):
-        builtins.canvas = _FAKE
-        _FAKE.calls.clear()
+        self.fake_canvas = MagicMock()
+        builtins.canvas = self.fake_canvas
         importlib.reload(main)
+        self.fake_canvas.reset_mock() # remove the calls form the main class
+        
+    def tearDown(self):
+        builtins.canvas = _REAL_CANVAS
 
     def test_shape_is_class(self):
         """Shape must be defined as a class.
@@ -60,24 +56,25 @@ class TestInheritanceShapes(unittest.TestCase):
     def test_line_draw_uses_canvas(self):
         """Line.draw calls canvas.draw_line once with the correct coordinates.
         Expected: draw_line called with (50, 50, 350, 50, color='red')"""
-        _FAKE.calls.clear()
         main.Line("red", 50, 50, 300).draw()
-        self.assertEqual(len(_FAKE.calls), 1)
-        x1, y1, x2, y2, color = _FAKE.calls[0]
-        self.assertEqual((x1, y1, x2, y2), (50, 50, 350, 50))
-        self.assertEqual(color, "red")
+        self.fake_canvas.draw_line.assert_called_once_with(50, 50, 350, 50, color="red")
 
     def test_cross_draw_uses_canvas_twice(self):
         """Cross.draw calls canvas.draw_line twice for the two diagonals.
         Expected: both diagonals drawn with color='blue'"""
-        _FAKE.calls.clear()
         main.Cross("blue", 100, 50, 200).draw()
-        self.assertEqual(len(_FAKE.calls), 2)
-        coords = sorted([(c[0], c[1], c[2], c[3]) for c in _FAKE.calls])
-        expected = sorted([(100, 50, 300, 250), (300, 50, 100, 250)])
-        self.assertEqual(coords, expected)
-        for call in _FAKE.calls:
-            self.assertEqual(call[4], "blue")
+        self.assertEqual(self.fake_canvas.draw_line.call_count, 2)
+        lines = set()
+        for c in self.fake_canvas.draw_line.call_args_list:
+            x1, y1, x2, y2 = c.args[:4]
+            lines.add(tuple(sorted([(x1, y1), (x2, y2)])))
+            self.assertEqual(c.kwargs.get("color"), "blue")
+        expected = {
+            tuple(sorted([(100, 50), (300, 250)])),
+            tuple(sorted([(300, 50), (100, 250)])),
+        }
+        # comparison of sets -> it compares the content and not the order of the points
+        self.assertEqual(lines, expected)
 
     def test_line_uses_super_init(self):
         """Line calls super().__init__ to set color, x, y from Shape.
@@ -87,7 +84,4 @@ class TestInheritanceShapes(unittest.TestCase):
         self.assertEqual(line.x, 50)
         self.assertEqual(line.y, 50)
 
-try:
-    run_tests(TestInheritanceShapes)
-finally:
-    builtins.canvas = _REAL_CANVAS # restores the canvas. Also after an exception
+run_tests(TestInheritanceShapes)
