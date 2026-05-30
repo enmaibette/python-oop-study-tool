@@ -21,8 +21,17 @@ import {
   TESTS_FAILED,
 } from '@/lib/constants';
 import { useUIStore } from '@/stores/uiStore.ts';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog.tsx';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog.tsx';
 import { Spinner } from '@/components/ui/spinner.tsx';
+import { useState } from 'react';
 
 export function Header() {
   const location = useLocation();
@@ -35,6 +44,8 @@ export function Header() {
   const testCaseResults = useUIStore((state) => state.testCaseResults);
   const setSubmitPopoverOpen = useUIStore((state) => state.setSubmitPopoverOpen);
 
+  const [resetPopoverOpen, setResetPopoverOpen] = useState(false)
+
   const passed = testCaseResults.filter((t) => t.status === 'pass').length;
   const total = testCaseResults.length;
   const allPassed = total > 0 && passed === total;
@@ -46,6 +57,59 @@ export function Header() {
     id && isChallengePage
       ? (challenges.find((challenge) => challenge.id === id)?.title ?? `Challenge ${id}`)
       : null;
+
+  const dialogNextChallenge = (
+    <Dialog open={isSubmitPopoverOpen} onOpenChange={setSubmitPopoverOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            {passed} / {total} tests passed
+          </DialogTitle>
+          <DialogDescription>{allPassed ? ALL_TESTS_PASSED : TESTS_FAILED}</DialogDescription>
+        </DialogHeader>
+        {allPassed && (
+          <DialogFooter>
+            {nextChallenge ? (
+              <Link
+                to={`/challenge/${nextChallenge.id}`}
+                onClick={() => setSubmitPopoverOpen(false)}
+              >
+                <Button className="w-full">
+                  {NEXT_CHALLENGE}: {nextChallenge.title}
+                </Button>
+              </Link>
+            ) : (
+              <DialogDescription>{ALL_CHALLENGES_COMPLETED}</DialogDescription>
+            )}
+          </DialogFooter>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+
+  const dialogReset = (
+    <Dialog open={resetPopoverOpen} onOpenChange={setResetPopoverOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Do you really want to reset your code?</DialogTitle>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            variant={'destructive'}
+            onClick={() => {
+              setResetPopoverOpen(!resetPopoverOpen);
+              triggerReset();
+            }}
+          >
+            Reset
+          </Button>
+          <DialogClose asChild>
+            <Button variant={'outline'}>Close</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <header
@@ -79,6 +143,8 @@ export function Header() {
       </Breadcrumb>
       {isChallengePage && (
         <div className="flex items-center gap-2">
+          {dialogNextChallenge}
+          {dialogReset}
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="w-fit">
@@ -110,33 +176,7 @@ export function Header() {
               {isReady ? <p>{SUBMIT_TOOLTIP_TEXT}</p> : <p>{PYODIDE_LOADING_TEXT}</p>}
             </TooltipContent>
           </Tooltip>
-          <Dialog open={isSubmitPopoverOpen} onOpenChange={setSubmitPopoverOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>
-                  {passed} / {total} tests passed
-                </DialogTitle>
-                <DialogDescription>{allPassed ? ALL_TESTS_PASSED : TESTS_FAILED}</DialogDescription>
-              </DialogHeader>
-              {allPassed && (
-                <DialogFooter>
-                  {nextChallenge ? (
-                    <Link
-                      to={`/challenge/${nextChallenge.id}`}
-                      onClick={() => setSubmitPopoverOpen(false)}
-                    >
-                      <Button className="w-full">
-                        {NEXT_CHALLENGE}: {nextChallenge.title}
-                      </Button>
-                    </Link>
-                  ) : (
-                    <DialogDescription>{ALL_CHALLENGES_COMPLETED}</DialogDescription>
-                  )}
-                </DialogFooter>
-              )}
-            </DialogContent>
-          </Dialog>
-          <Button variant="outline" size="sm" onClick={triggerReset}>
+          <Button variant="outline" size="sm" onClick={() => setResetPopoverOpen(true)}>
             Reset
           </Button>
         </div>
