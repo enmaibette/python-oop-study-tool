@@ -52,6 +52,7 @@ const runCode = async (
   }
   const stdout: string[] = [];
   pyodide!.setStdout({ batched: (line: string) => stdout.push(line) });
+  pyodide!.setStderr({ batched: (line: string) => stdout.push(line) });
   const freshGlobals = pyodide!.globals.get('dict')();
   freshGlobals.set('__name__', '__main__');
   try {
