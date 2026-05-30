@@ -23,4 +23,4 @@ This repository contains a Python OOP (Object-Oriented Programming) study tool d
 1. `npm install`
 2. `npm run test`
 3. `npm run test:ui`
-4. `npm run test:e2e"`
+4. `npm run test:e2e`
