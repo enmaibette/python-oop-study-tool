@@ -83,6 +83,7 @@ self.onmessage = async (event) => {
 
       const testStdout: string[] = [];
       pyodide.setStdout({ batched: (line: string) => testStdout.push(line) });
+      pyodide.setStderr({ batched: (line: string) => testStdout.push(line) });
       await pyodide.runPythonAsync(testcasePy);
 
       const results = JSON.parse(testStdout[testStdout.length - 1] ?? '[]');
