@@ -100,4 +100,6 @@ The one method call with different behaviour is called a **polymorphic method**.
     - `(self.x, self.y)` → `(self.x + self.size, self.y + self.size)` with `color=self.color`
     - `(self.x + self.size, self.y)` → `(self.x, self.y + self.size)` with `color=self.color`
 - Create `line = Line("red", 50, 50, 300)` and call `line.draw()`
-- Create `cross = Cross("blue", 100, 50, 200)` and call `cross.draw()`
+- Create `cross = Cross("blue", 100, 50, 200)` and call `cross.draw()`. It should look like this:
+
+  ![Example Cross](crossExample.png)
