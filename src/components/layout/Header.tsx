@@ -22,6 +22,7 @@ import {
 } from '@/lib/constants';
 import { useUIStore } from '@/stores/uiStore.ts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog.tsx';
+import { Spinner } from '@/components/ui/spinner.tsx';
 
 export function Header() {
   const location = useLocation();
@@ -83,6 +84,7 @@ export function Header() {
               <div className="w-fit">
                 <Button variant="secondary" size="sm" onClick={triggerRun} disabled={!isReady}>
                   Run
+                  {!isReady && <Spinner data-icon="inline-end" />}
                 </Button>
               </div>
             </TooltipTrigger>
@@ -100,6 +102,7 @@ export function Header() {
                   disabled={!isReady}
                 >
                   Submit
+                  {!isReady && <Spinner data-icon="inline-end" />}
                 </Button>
               </div>
             </TooltipTrigger>
@@ -110,10 +113,10 @@ export function Header() {
           <Dialog open={isSubmitPopoverOpen} onOpenChange={setSubmitPopoverOpen}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>{passed} / {total} tests passed</DialogTitle>
-                <DialogDescription>
-                  {allPassed ? ALL_TESTS_PASSED : TESTS_FAILED}
-                </DialogDescription>
+                <DialogTitle>
+                  {passed} / {total} tests passed
+                </DialogTitle>
+                <DialogDescription>{allPassed ? ALL_TESTS_PASSED : TESTS_FAILED}</DialogDescription>
               </DialogHeader>
               {allPassed && (
                 <DialogFooter>
@@ -122,7 +125,9 @@ export function Header() {
                       to={`/challenge/${nextChallenge.id}`}
                       onClick={() => setSubmitPopoverOpen(false)}
                     >
-                      <Button className="w-full">{NEXT_CHALLENGE}: {nextChallenge.title}</Button>
+                      <Button className="w-full">
+                        {NEXT_CHALLENGE}: {nextChallenge.title}
+                      </Button>
                     </Link>
                   ) : (
                     <DialogDescription>{ALL_CHALLENGES_COMPLETED}</DialogDescription>

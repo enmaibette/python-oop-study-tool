@@ -60,6 +60,8 @@ Required files per challenge:
             builtins.canvas = _REAL_CANVAS
     ```
 
+Check the challenge `src/data/challenges/1-class-definition` for an example of the required structure and files.
+
 The runtime aggregator is `src/data/challenges/index.ts`.
 
 
