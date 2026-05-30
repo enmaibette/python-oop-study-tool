@@ -102,4 +102,4 @@ The one method call with different behaviour is called a **polymorphic method**.
 - Create `line = Line("red", 50, 50, 300)` and call `line.draw()`
 - Create `cross = Cross("blue", 100, 50, 200)` and call `cross.draw()`. It should look like this:
 
-  ![Example Cross](crossExample.png)
+  ![Example Cross](/python-oop-study-tool/crossExample.png)

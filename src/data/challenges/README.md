@@ -26,6 +26,7 @@ Required files per challenge:
     ```python
     print('hello')
     ```
+  - Images can be added in the public folder and referenced in the markdown with `![alt text](/python-oop-study-tool/image.png)`
 - `hints.md`
   - a list of hints
   - format:
