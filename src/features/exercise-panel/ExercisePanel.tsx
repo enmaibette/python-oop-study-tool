@@ -3,7 +3,7 @@ import { X, FileText, Lightbulb, Palette } from 'lucide-react';
 import { CustomTabs, TabsList, TabsTrigger, TabsContent } from '../../components/common/CustomTabs';
 import { ExerciseTab } from './ExerciseTab';
 import { HintTab } from './HintTab';
-import { CanvasTab } from './CanvasTab';
+import { CanvasDocsTab } from './CanvasDocsTab';
 import type { Challenge, ExerciseTab as ExerciseTabType } from '@/types';
 
 interface ExercisePanelProps {
@@ -79,7 +79,7 @@ export const ExercisePanel = memo(function ExercisePanel({
                   }
                 }}
               >
-                {isOpen ? 'Canvas' : <Palette className="h-4 w-4" />}
+                {isOpen ? 'Canvas Docs' : <Palette className="h-4 w-4" />}
               </TabsTrigger>
             )}
           </TabsList>
@@ -106,7 +106,7 @@ export const ExercisePanel = memo(function ExercisePanel({
             </TabsContent>
             {challenge.canvas && (
               <TabsContent value="canvas" className="flex-1 overflow-y-auto">
-                <CanvasTab />
+                <CanvasDocsTab />
               </TabsContent>
             )}
           </>
