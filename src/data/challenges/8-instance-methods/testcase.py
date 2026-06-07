@@ -13,8 +13,8 @@ class TestInstanceMethods(unittest.TestCase):
         importlib.reload(main)
 
     def test_class_exists(self):
-        """Bookmust be defined as a class.
-        Expected: isinstance(main.Book, type) is True"""
+        """Book must be defined as a class.
+        Expected: isInstance(main.Book, type) is True"""
         self.assertIsInstance(main.Book, type)
 
     def test_init_sets_title_and_author(self):
